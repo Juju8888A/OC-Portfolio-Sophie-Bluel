@@ -144,6 +144,12 @@ li:hover {
 	background-color: #FFFEF8;
 	
 }
+
+.filter-bar button:hover,
+.filter-bar button.active{
+	color: white;
+	background-color: #1D6154;
+}
 .gallery {
 	width: 100%;
 	display: grid;
