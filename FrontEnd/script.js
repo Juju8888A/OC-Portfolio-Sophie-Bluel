@@ -33,7 +33,7 @@ function projectsDisplay() {
     .filter((work) => work.category.name)
     .map(
       (work) => `
-    <figure class="project-card active" data-"${work.category.name}">
+    <figure class="project-card">
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     <figcaption>${work.title}</figcaption>
     </figure>
@@ -48,7 +48,7 @@ function projectsDisplayObjets() {
     .filter((work) => work.category.name.includes("Objets"))
     .map(
       (work) => `
-    <figure class="project-card active" data-"${work.category.name}">
+    <figure class="project-card">
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     <figcaption>${work.title}</figcaption>
     </figure>
@@ -62,7 +62,7 @@ function projectsDisplayAppartements() {
     .filter((work) => work.category.name.includes("Appartements"))
     .map(
       (work) => `
-    <figure class="project-card active" data-"${work.category.name}">
+    <figure class="project-card">
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     <figcaption>${work.title}</figcaption>
     </figure>
@@ -76,7 +76,7 @@ function projectsDisplayHotelResto() {
     .filter((work) => work.category.name.includes("Hotels & restaurants"))
     .map(
       (work) => `
-    <figure class="project-card active" data-"${work.category.name}">
+    <figure class="project-card">
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     <figcaption>${work.title}</figcaption>
     </figure>
