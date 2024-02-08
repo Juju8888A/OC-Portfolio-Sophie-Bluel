@@ -27,7 +27,7 @@ async function fetchCategory() {
   console.log(category);
 }
 
-// je crée ma fonction d'affichage
+// je crée ma fonction d'affichage / categorie : tous / grace aux méthodes filter et map
 function projectsDisplay() {
   projectsContainer.innerHTML = projects
     .filter((work) => work.category.name)
@@ -42,7 +42,7 @@ function projectsDisplay() {
     .join("");
 }
 
-// je crée mes différents filtres en utilisant filter relié au click du bouton correspondant
+// je crée ma fonction d'affichage / categorie : objets
 function projectsDisplayObjets() {
   projectsContainer.innerHTML = projects
     .filter((work) => work.category.name.includes("Objets"))
@@ -57,6 +57,7 @@ function projectsDisplayObjets() {
     .join("");
 }
 
+// je crée ma fonction d'affichage / categorie : appartements
 function projectsDisplayAppartements() {
   projectsContainer.innerHTML = projects
     .filter((work) => work.category.name.includes("Appartements"))
@@ -71,6 +72,7 @@ function projectsDisplayAppartements() {
     .join("");
 }
 
+// je crée ma fonction d'affichage / categorie : hotels et restaurants
 function projectsDisplayHotelResto() {
   projectsContainer.innerHTML = projects
     .filter((work) => work.category.name.includes("Hotels & restaurants"))

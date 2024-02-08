@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	min-height: 100vh;
 }
 ol, ul {
 	list-style: none;
@@ -122,6 +123,43 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+.formulaire {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 100px;
+}
+
+.formulaire h2 {
+	margin-bottom: 40px;
+}
+
+.form-content{
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.form-content input{
+	width: 300px;
+	padding: 15px;
+	border: none;
+	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.2));
+}
+
+input[type="email"]{
+	margin-bottom: 10px;
+
+}
+
+#mdp-oublie {
+	border: none;
+	background: #FFFEF8;
+	text-decoration: underline;
+	
+}
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 50px;
@@ -210,4 +248,5 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+
 
