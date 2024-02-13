@@ -142,13 +142,13 @@ li:hover {
 }
 
 .form-content{
+	width: 350px;
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 }
 
 .form-content input{
-	width: 300px;
 	padding: 15px;
 	border: none;
 	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.2));
