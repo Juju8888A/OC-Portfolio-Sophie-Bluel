@@ -7,16 +7,6 @@ const validBtn = document.getElementById("btn-envoi");
 let mailMsg = document.getElementById("mail_comment");
 let mdpMsg = document.getElementById("mdp_comment");
 
-// au changement de valeurs dans l'input email, je souhaite que le mailValid s'active
-mail.addEventListener("change", function () {
-  mailValid(this);
-});
-
-// au changement de valeurs dans l'input password, je souhaite que le mdpValid s'active
-mdp.addEventListener("change", function () {
-  mdpValid(this);
-});
-
 // **************************** E-MAIL*****************************************
 
 // pour vérifier l'email je vérifie son contenu, que c'est bien une adressse mail avec regExp
@@ -30,9 +20,13 @@ const mailValid = function (inputEmail) {
   if (testEmail) {
     mailMsg.innerHTML = "Adresse Valide";
     mailMsg.style.color = "green";
+    // je renvoie true pour dire que c'est correct
+    return true;
   } else {
     mailMsg.innerHTML = "Veuillez entrer un e-mail valide";
     mailMsg.style.color = "red";
+    // je renvoie false pour dire que c'est incorrect
+    return false;
   }
 };
 
@@ -64,8 +58,33 @@ const mdpValid = function (inputPassword) {
   if (valid) {
     mdpMsg.innerHTML = "Mot de passe valide";
     mdpMsg.style.color = "green";
+    return true;
   } else {
     mdpMsg.innerHTML = "Veuillez entrer un mot de passe valide";
     mdpMsg.style.color = "red";
+    return false;
   }
 };
+
+// ****************** EVENEMENTS **************************
+
+// au changement de valeurs dans l'input email, je souhaite que le mailValid s'active
+mail.addEventListener("change", function () {
+  mailValid(this);
+});
+
+// au changement de valeurs dans l'input password, je souhaite que le mdpValid s'active
+mdp.addEventListener("change", function () {
+  mdpValid(this);
+});
+
+myForm.addEventListener("submit", function (e) {
+  // par defaut le formulaire s'envoie, j'utilise e.preventDefault pour contrer, je recupère l'evenement (e)
+  e.preventDefault();
+  if (mailValid(mail) && mdpValid(mdp)) {
+    window.location.href = "index.html";
+    console.log("valide");
+  } else {
+    console.log("non valide");
+  }
+});
