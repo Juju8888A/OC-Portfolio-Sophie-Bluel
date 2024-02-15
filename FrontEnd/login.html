@@ -34,21 +34,21 @@
     <main>
         <section class="formulaire">
             <h2>Log in</h2>
-            <form action="#" class="form-content" id="myForm">
+            <form action="#" method="POST" class="form-content" id="myForm">
                 <div class="form-mail">
                     <label for="mail">E-mail</label>
-                    <input type="email" id="mail" required>
-                    <span id="mail_missing"></span>
+                    <input type="email" id="mail" name="mail" required>
+                    <span id="mail_comment"></span>
                 </div>
                 <div class="form-mdp">
                     <label for="mdp">Mot de passe</label>
-                    <input type="password" id="mdp" required>
-                    <span id="mdp_missing"></span>
+                    <input type="password" id="mdp" name="mdp" required>
+                    <span id="mdp_comment"></span>
                 </div>
                 <input type="submit" value="Se connecter" id="btn-envoi">
 
-                <button id="mdp-oublie">Mot de passe oublié</button>
             </form>
+            <button id="mdp-oublie">Mot de passe oublié</button>
         </section>
     </main>
 
