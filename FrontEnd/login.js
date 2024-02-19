@@ -12,7 +12,7 @@ let errorLogin = document.getElementById("error_comment");
 
 // pour vérifier l'email je vérifie son contenu, que c'est bien une adressse mail avec regExp
 const mailValid = function (inputEmail) {
-  let emailRegExp = new RegExp(`^[a-z._-]+@[a-z._-]+\.[a-z._-]+$`);
+  let emailRegExp = new RegExp(`^[a-z._-]+@[a-z._-]+\\.[a-z._-]+$`);
   // je teste le regExp
   let testEmail = emailRegExp.test(inputEmail.value);
   console.log(testEmail);
@@ -80,7 +80,7 @@ mdp.addEventListener("change", function () {
 });
 
 myForm.addEventListener("submit", function (e) {
-  // par defaut le formulaire s'envoie, j'utilise e.preventDefault pour contrer, je recupère l'evenement (e)
+  // par defaut le formulaire s'envoie, j'utilise e.preventDefault pour contrer l'envoi, je recupère l'evenement (e)
   e.preventDefault();
   if (mailValid(mail) && mdpValid(mdp)) {
     window.location.href = "index.html";
@@ -94,17 +94,22 @@ myForm.addEventListener("submit", function (e) {
 
 // ************* API POST ***************
 
+// je crée un objet data avec les informations de l'utilisateur
+let dataUser = {
+  mail:"sophie.bluel@test.tld",
+  password="S0phie"};
+
+// je récupère l'url de l'api login
 let urlLogin = "http://localhost:5678/api/users/login";
+
+// je créer une variable avec POST
 let fetchLogin = {
   method: "POST",
   headers: {
     accept: "application/json",
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({
-    mail: "sophie.bluel@test.tld",
-    mdp: "S0phie",
-  }),
+  body: JSON.stringify(dataUser),
 };
 
 fetch(urlLogin, fetchLogin)
@@ -116,7 +121,7 @@ fetch(urlLogin, fetchLogin)
     console.log("Une erreur est survenue", error);
   });
 
-// ************ ID et TOKEN **************
+// // ************ ID et TOKEN **************
 
 let id = 1;
 let token =
