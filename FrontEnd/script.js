@@ -95,3 +95,6 @@ buttonHotelResto.addEventListener("click", projectsDisplayHotelResto);
 // je load les fetch dès l'ouverture de la page
 window.addEventListener("load", fetchProjects);
 window.addEventListener("load", fetchCategory);
+console.log(localStorage.getItem("token"));
+
+// *********************** MODE EDITION *****************************

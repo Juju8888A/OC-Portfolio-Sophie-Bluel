@@ -19,8 +19,8 @@ const mailValid = function (inputEmail) {
 
   // si mon adresse est bien écrite, résultat vert sinon résultat rouge
   if (testEmail) {
-    mailMsg.innerHTML = "Adresse Valide";
-    mailMsg.style.color = "green";
+    // mailMsg.innerHTML = "Adresse Valide";
+    // mailMsg.style.color = "green";
     // je renvoie true pour dire que c'est correct
     return true;
   } else {
@@ -49,7 +49,7 @@ const mdpValid = function (inputPassword) {
   } else if (!/[0-9]/.test(inputPassword.value)) {
     messageMdp = "Le mot de passe doit contenir au moins 1 chiffre";
   } else {
-    messageMdp = "Mot de passe valide";
+    // messageMdp = "Mot de passe valide";
     valid = true;
   }
   // console.log(messageMdp);
@@ -57,8 +57,8 @@ const mdpValid = function (inputPassword) {
   // affichage résultat mot de passe valide ou non
 
   if (valid) {
-    mdpMsg.innerHTML = "Mot de passe valide";
-    mdpMsg.style.color = "green";
+    // mdpMsg.innerHTML = "Mot de passe valide";
+    // mdpMsg.style.color = "green";
     return true;
   } else {
     mdpMsg.innerHTML = "Veuillez entrer un mot de passe valide";
@@ -83,7 +83,8 @@ myForm.addEventListener("submit", function (e) {
   // par defaut le formulaire s'envoie, j'utilise e.preventDefault pour contrer l'envoi, je recupère l'evenement (e)
   e.preventDefault();
   if (mailValid(mail) && mdpValid(mdp)) {
-    window.location.href = "index.html";
+    // si mon email et mon mot de passe est bon, je logue ma fonction qui permet de valider l'authentification avec le bon tokken
+    loginUser();
     console.log("valide");
   } else {
     errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
@@ -94,38 +95,45 @@ myForm.addEventListener("submit", function (e) {
 
 // ************* API POST ***************
 
-// je crée un objet data avec les informations de l'utilisateur
-let dataUser = {
-  mail:"sophie.bluel@test.tld",
-  password="S0phie"};
+// je crée une fonction
+function loginUser() {
+  let dataUser = {
+    email: mail.value,
+    password: mdp.value,
+  };
 
-// je récupère l'url de l'api login
-let urlLogin = "http://localhost:5678/api/users/login";
+  // je récupère l'url de l'api login
+  let urlLogin = "http://localhost:5678/api/users/login";
 
-// je créer une variable avec POST
-let fetchLogin = {
-  method: "POST",
-  headers: {
-    accept: "application/json",
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(dataUser),
-};
+  // je crée une variable avec ma requete POST
+  let fetchLogin = {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataUser),
+    // j'envoie les données entrées dans les inputs email et password
+  };
 
-fetch(urlLogin, fetchLogin)
-  .then((response) => response.json())
-  .then((dataUser) => {
-    console.log(dataUser);
-  })
-  .catch((error) => {
-    console.log("Une erreur est survenue", error);
-  });
+  // dans mon fetch je logue l'url et ma requete POST
+  // puis je veux que la réponse, si le tokken n'est pas présent, m'indique une erreur d'authentification
+  // si l'email et le mot de passe sont bons, je veux que l'api me retourne le token et le stocke dans le localStorage, puis m'ouvre la fenêtre édition
+  fetch(urlLogin, fetchLogin)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Invalide authentication");
+      }
+      return response.json();
+    })
+    .then((dataUser) => {
+      console.log(dataUser);
 
-// // ************ ID et TOKEN **************
-
-let id = 1;
-let token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwNzcyNjMyMSwiZXhwIjoxNzA3ODEyNzIxfQ.i_LR6LCkFbQBKLig6bO7krWxeQuLT5D77kkXiQf1kmg";
-
-localStorage.setItem("id", id);
-localStorage.setItem("token", token);
+      localStorage.setItem("token", dataUser.token);
+      window.location.href = "index.html";
+      console.log(localStorage.getItem("token"));
+    })
+    .catch((error) => {
+      console.log("Une erreur est survenue", error);
+    });
+}
