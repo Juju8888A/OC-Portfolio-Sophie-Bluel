@@ -6,6 +6,7 @@ const validBtn = document.getElementById("btn-envoi");
 // récupération des span error
 let mailMsg = document.getElementById("mail_comment");
 let mdpMsg = document.getElementById("mdp_comment");
+let errorLogin = document.getElementById("error_comment");
 
 // **************************** E-MAIL*****************************************
 
@@ -85,6 +86,41 @@ myForm.addEventListener("submit", function (e) {
     window.location.href = "index.html";
     console.log("valide");
   } else {
+    errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
+    errorLogin.style.color = "red";
     console.log("non valide");
   }
 });
+
+// ************* API POST ***************
+
+let urlLogin = "http://localhost:5678/api/users/login";
+let fetchLogin = {
+  method: "POST",
+  headers: {
+    accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    mail: "sophie.bluel@test.tld",
+    mdp: "S0phie",
+  }),
+};
+
+fetch(urlLogin, fetchLogin)
+  .then((response) => response.json())
+  .then((dataUser) => {
+    console.log(dataUser);
+  })
+  .catch((error) => {
+    console.log("Une erreur est survenue", error);
+  });
+
+// ************ ID et TOKEN **************
+
+let id = 1;
+let token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwNzcyNjMyMSwiZXhwIjoxNzA3ODEyNzIxfQ.i_LR6LCkFbQBKLig6bO7krWxeQuLT5D77kkXiQf1kmg";
+
+localStorage.setItem("id", id);
+localStorage.setItem("token", token);
