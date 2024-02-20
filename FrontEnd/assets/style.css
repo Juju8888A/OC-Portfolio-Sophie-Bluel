@@ -57,6 +57,16 @@ body {
 	font-size: 14px;
 	background-color: #FFFEF8;
 }
+.edition-bar{
+	display: flex;
+	justify-content: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	gap: 10px;
+	background-color: black;
+	color: white;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -130,58 +140,22 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
-
-.formulaire {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-top: 100px;
-}
-
-.formulaire h2 {
-	margin-bottom: 40px;
-}
-
-.form-content{
-	width: 350px;
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-}
-
-.form-content input{
-	padding: 15px;
-	border: none;
-	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.2));
-}
-
-.form-mail {
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-}
-
-.form-mdp{
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-}
-
-input[type="email"]{
-	margin-bottom: 10px;
-
-}
-
-#mdp-oublie {
-	border: none;
-	background: #FFFEF8;
-	text-decoration: underline;
-	
-}
-
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 50px;
+}
+#portfolio {
+	position: relative;
+}
+#button-modify{
+	display: flex;
+	gap: 10px;
+	border: none;
+	background-color: #FFFEF8;
+	position: absolute;
+	top: 8px;
+	left: 700px;
+	cursor: pointer;
 }
 .filter-bar {
 	display: flex;
@@ -275,6 +249,58 @@ margin-bottom: 370px;
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
+}
+
+
+/* ********************************** FORMULAIRE LOGIN **************************************** */
+
+
+.formulaire {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 100px;
+}
+
+.formulaire h2 {
+	margin-bottom: 40px;
+}
+
+.form-content{
+	width: 350px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.form-content input{
+	padding: 15px;
+	border: none;
+	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.2));
+}
+
+.form-mail {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.form-mdp{
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+input[type="email"]{
+	margin-bottom: 10px;
+
+}
+
+#mdp-oublie {
+	border: none;
+	background: #FFFEF8;
+	text-decoration: underline;
+	
 }
 
 

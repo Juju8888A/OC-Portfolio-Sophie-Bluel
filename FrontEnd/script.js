@@ -6,6 +6,8 @@ const buttonAppartements = document.getElementById("btn-appartements");
 const buttonHotelResto = document.getElementById("btn-hotel-resto");
 const buttonTous = document.getElementById("btn-tous");
 
+const myForm = document.getElementById("myForm");
+
 let projects = [];
 let category = [];
 
@@ -98,3 +100,27 @@ window.addEventListener("load", fetchCategory);
 console.log(localStorage.getItem("token"));
 
 // *********************** MODE EDITION *****************************
+
+// if (loginUser == "valide") {
+//   editionMode();
+// }
+
+// function editionMode() {}
+// editionMode();
+
+// je crée ma barre tout en haut "Mode Edition"
+// let modeEdition = document.createElement("div");
+// modeEdition.id = "edition";
+// let textEdition = document.createTextNode("Mode Edition");
+// modeEdition.appendChild(textEdition);
+// // je l'insère au dessus du header
+// let header = document.querySelector("header");
+// document.body.insertBefore(modeEdition, header);
+
+let editionBar = document.querySelector(".edition-bar");
+let filterBar = document.querySelector(".filter-bar");
+let btnModify = document.getElementById("button-modify");
+editionBar.style.display = "";
+filterBar.style.display = "";
+btnModify.style.display = "";
+// editionBar.style.visibility = "hidden";

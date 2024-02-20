@@ -117,7 +117,7 @@ function loginUser() {
   };
 
   // dans mon fetch je logue l'url et ma requete POST
-  // puis je veux que la réponse, si le tokken n'est pas présent, m'indique une erreur d'authentification
+  // puis je veux que la réponse, si elle n'est pas bonne(mauvais email avec mauvais mot de passe), m'indique une erreur d'authentification
   // si l'email et le mot de passe sont bons, je veux que l'api me retourne le token et le stocke dans le localStorage, puis m'ouvre la fenêtre édition
   fetch(urlLogin, fetchLogin)
     .then((response) => {
