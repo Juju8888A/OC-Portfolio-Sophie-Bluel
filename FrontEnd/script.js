@@ -119,8 +119,10 @@ console.log(localStorage.getItem("token"));
 
 let editionBar = document.querySelector(".edition-bar");
 let filterBar = document.querySelector(".filter-bar");
-let btnModify = document.getElementById("button-modify");
+let openModal = document.getElementById("button-modify");
 editionBar.style.display = "";
 filterBar.style.display = "";
-btnModify.style.display = "";
+openModal.style.display = "";
 // editionBar.style.visibility = "hidden";
+
+// ************* MODALE *********************

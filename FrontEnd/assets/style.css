@@ -51,11 +51,13 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background-color: #FFFEF8;
+}
+main{
+	max-width: 1140px;
+	margin:auto;
 }
 .edition-bar{
 	display: flex;
@@ -70,7 +72,9 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	max-width: 1140px;
+	margin:auto;
+	margin-top: 50px;
 }
 section {
 	margin: 50px 0
@@ -247,10 +251,12 @@ margin-bottom: 370px;
 }
 
 footer nav ul {
+	max-width: 1140px;
+	margin:auto;
 	display: flex;
 	justify-content: flex-end;
+	
 }
-
 
 /* ********************************** FORMULAIRE LOGIN **************************************** */
 
