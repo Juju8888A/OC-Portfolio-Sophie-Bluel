@@ -86,11 +86,13 @@ myForm.addEventListener("submit", function (e) {
     // si mon email et mon mot de passe est bon, je logue ma fonction qui permet de valider l'authentification avec le bon tokken
     loginUser();
     console.log("valide");
-  } else {
-    errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
-    errorLogin.style.color = "red";
-    console.log("non valide");
+    editionMode();
   }
+  // } else {
+  //   errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
+  //   errorLogin.style.color = "red";
+  //   console.log("non valide");
+  // }
 });
 
 // ************* API POST ***************
@@ -122,18 +124,19 @@ function loginUser() {
   fetch(urlLogin, fetchLogin)
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Invalide authentication");
+        throw new Error("Invalide authentification");
       }
       return response.json();
     })
     .then((dataUser) => {
       console.log(dataUser);
-
       localStorage.setItem("token", dataUser.token);
       window.location.href = "index.html";
       console.log(localStorage.getItem("token"));
     })
     .catch((error) => {
       console.log("Une erreur est survenue", error);
+      errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
+      errorLogin.style.color = "red";
     });
 }

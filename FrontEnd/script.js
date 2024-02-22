@@ -101,28 +101,68 @@ console.log(localStorage.getItem("token"));
 
 // *********************** MODE EDITION *****************************
 
-// if (loginUser == "valide") {
-//   editionMode();
-// }
+// je crée ma barre d'étition en haut de page
+let modeEdition = document.createElement("div");
+modeEdition.id = "edition-bar";
+modeEdition.innerHTML = "<p>Mode édition</p>";
+// je l'insère au dessus du header
+let header = document.querySelector("header");
+document.body.insertBefore(modeEdition, header);
 
-// function editionMode() {}
-// editionMode();
+// je crée mon bouton modifier
+let titleSection2 = document.getElementById("title-projects");
+titleSection2.innerHTML +=
+  "<button class=btn-modif><i class=`fa-solid fa-pen-to-square`></i>modifier</button>";
 
-// je crée ma barre tout en haut "Mode Edition"
-// let modeEdition = document.createElement("div");
-// modeEdition.id = "edition";
-// let textEdition = document.createTextNode("Mode Edition");
-// modeEdition.appendChild(textEdition);
-// // je l'insère au dessus du header
-// let header = document.querySelector("header");
-// document.body.insertBefore(modeEdition, header);
-
-let editionBar = document.querySelector(".edition-bar");
+// je fais disparaitre ma barre
 let filterBar = document.querySelector(".filter-bar");
-let openModal = document.getElementById("button-modify");
-editionBar.style.display = "";
-filterBar.style.display = "";
-openModal.style.display = "";
-// editionBar.style.visibility = "hidden";
+filterBar.style.display = "none";
+
+// je change login en logout quand l'utilisateur est connecté
+let logBtn = document.getElementById("login-btn");
+logBtn.innerHTML = "logout";
 
 // ************* MODALE *********************
+
+// const openModal = function (e) {
+//   e.preventDefault();
+//   const target = document.querySelector(e.target.getAttribute("href"));
+//   target.style.display = null;
+//   target.removeAttribute("aria-hidden");
+//   target.setAttribute("aria-modal", "true");
+// };
+// document.querySelectorAll(".js-modal").forEach((a) => {
+//   a.addEventListener("click", openModal);
+// });
+
+{
+  /* <div class="edition-bar"><i class="fa-solid fa-pen-to-square" id="icone"></i>Mode édition</div> */
+}
+
+{
+  /* <a href="#modal1" class="js-modal"><button type="text" id="button-modify"><i
+						class="fa-solid fa-pen-to-square" id="icone"></i>modifier</button></a>
+			<aside id="modal1" class="modal" role="dialog" aria-modal="false" aria-labelledby="title-modal">      
+				<div class="modal-wrapper">
+					<h4 id="title-modal">Galerie photo</h4>
+					<p>Hello, little man. I will destroy you! Calculon is gonna kill us and it's all everybody else's
+						fault! You mean while I'm sleeping in it? Eeeee! Now say "nuclear wessels"! I videotape every
+						customer that comes in here, so that I may blackmail them later.</p>
+					<p>It doesn't look so shiny to me. Shut up and get to the point! Professor, make a woman out of me.  
+						Bender, we're trying our best. <strong> Fry!</strong> <em> Stay back!</em> He's too powerful!
+					</p>  
+					<input type="text">
+					<a href="#">coucou</a>
+
+					<h3>I was all of history's great robot actors - Acting Unit 0.8; Thespomat; David Duchovny!</h3>
+					<p>Then throw her in the laundry room, which will hereafter be referred to as "the brig". I'm sure
+						those windmills will keep them cool. In your time, yes, but nowadays shut up! Besides, these are
+						adult stemcells, harvested from perfectly healthy adults whom I killed for their stemcells.</p>
+					<ul>  
+						<li>Are you crazy? I can't swallow that.</li>
+						<li>You can see how I lived before I met you.</li>
+						<li>Eeeee! Now say "nuclear wessels"!</li>
+					</ul>  
+				</div>  
+			</aside> */
+}
