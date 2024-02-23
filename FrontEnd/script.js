@@ -101,28 +101,32 @@ console.log(localStorage.getItem("token"));
 
 // *********************** MODE EDITION *****************************
 
-// je crée ma barre d'étition en haut de page
-let modeEdition = document.createElement("div");
-modeEdition.id = "edition-bar";
-modeEdition.innerHTML = "<p>Mode édition</p>";
-// je l'insère au dessus du header
-let header = document.querySelector("header");
-document.body.insertBefore(modeEdition, header);
+if (localStorage.getItem("token")) {
+  // je crée ma barre d'édition en haut de page
+  let modeEdition = document.createElement("div");
+  modeEdition.id = "edition-bar";
+  modeEdition.innerHTML = "<p>Mode édition</p>";
+  // je l'insère au dessus du header
+  let header = document.querySelector("header");
+  document.body.insertBefore(modeEdition, header);
 
-// je crée mon lien "modifier"
-let titleSection2 = document.getElementById("title-projects");
-titleSection2.innerHTML +=
-  "<a class=lien-modif href=#modal1><i class=`fa-solid fa-pen-to-square`></i>modifier</a>";
-let lienModif = document.querySelector(".lien-modif");
-lienModif.classList.add("js-modal");
+  // je crée mon lien "modifier"
+  let titleSection2 = document.getElementById("title-projects");
+  titleSection2.innerHTML += `<a class=lien-modif href=#modal1><i class="fa-solid fa-pen-to-square"></i>modifier</a>`;
+  let lienModif = document.querySelector(".lien-modif");
+  lienModif.classList.add("js-modal");
 
-// je fais disparaitre ma barre
-let filterBar = document.querySelector(".filter-bar");
-filterBar.style.display = "none";
+  // je fais disparaitre ma barre
+  let filterBar = document.querySelector(".filter-bar");
+  filterBar.style.display = "none";
 
-// je change login en logout quand l'utilisateur est connecté
-let logBtn = document.getElementById("login-btn");
-logBtn.innerHTML = "logout";
+  // je change login en logout quand l'utilisateur est connecté
+  let logBtn = document.getElementById("login-btn");
+  logBtn.innerHTML = "logout";
+  logBtn.addEventListener("click", function () {
+    localStorage.removeItem("token");
+  });
+}
 
 // ****************************** MODALE ************************************
 
@@ -169,8 +173,8 @@ const closeModal = function (e) {
   e.preventDefault();
   modal.style.display = "none";
   // retire le display none sur modal1
-  target.setAttribute("aria-hidden", true);
-  target.removeAttribute("aria-modal");
+  modal.setAttribute("aria-hidden", true);
+  modal.removeAttribute("aria-modal");
   modal.removeEventListener("click", closeModal);
   modal
     .querySelector(".js-modal-close")
