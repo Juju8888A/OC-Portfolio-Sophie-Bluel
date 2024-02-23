@@ -109,10 +109,12 @@ modeEdition.innerHTML = "<p>Mode édition</p>";
 let header = document.querySelector("header");
 document.body.insertBefore(modeEdition, header);
 
-// je crée mon bouton modifier
+// je crée mon lien "modifier"
 let titleSection2 = document.getElementById("title-projects");
 titleSection2.innerHTML +=
-  "<button class=btn-modif><i class=`fa-solid fa-pen-to-square`></i>modifier</button>";
+  "<a class=lien-modif href=#modal1><i class=`fa-solid fa-pen-to-square`></i>modifier</a>";
+let lienModif = document.querySelector(".lien-modif");
+lienModif.classList.add("js-modal");
 
 // je fais disparaitre ma barre
 let filterBar = document.querySelector(".filter-bar");
@@ -122,47 +124,68 @@ filterBar.style.display = "none";
 let logBtn = document.getElementById("login-btn");
 logBtn.innerHTML = "logout";
 
-// ************* MODALE *********************
+// ****************************** MODALE ************************************
 
-// const openModal = function (e) {
-//   e.preventDefault();
-//   const target = document.querySelector(e.target.getAttribute("href"));
-//   target.style.display = null;
-//   target.removeAttribute("aria-hidden");
-//   target.setAttribute("aria-modal", "true");
-// };
-// document.querySelectorAll(".js-modal").forEach((a) => {
-//   a.addEventListener("click", openModal);
-// });
+let modalContainer = document.createElement("aside");
+modalContainer.id = "modal1";
+modalContainer.classList.add("modal");
+modalContainer.setAttribute("aria-hidden", true);
+modalContainer.setAttribute("role", "dialog");
+modalContainer.setAttribute("aria-labelledby", "titlemodal");
+modalContainer.setAttribute("style", "display:none;");
+// modalContainer.setAttribute("aria-modal", false);
+document.body.appendChild(modalContainer);
+modalContainer.innerHTML +=
+  "<div class=modal-wrapper><button class=js-modal-close>Fermer</button><h4 id=titlemodal>Galerie Photo</h4><div class=photos></div><hr id=barre><button>Ajouter une photo</div></div>";
+// pour gérer l'accessibilité, on utilise aria(améliore l'accessibilité)
+// par défaut la boite modal est caché "aria-hidden",
+// role dialog c'est pour indiquer une fenetre en dehors du contenu principal
+// aria modal empeche l'interaction avec les elements sous la modal
+let modalContent = document.querySelector(".modal-wrapper");
+modalContent.classList.add("js-modal-stop");
 
-{
-  /* <div class="edition-bar"><i class="fa-solid fa-pen-to-square" id="icone"></i>Mode édition</div> */
-}
+// ***************** OUVERTURE ET FERMETURE DE LA MODALE *******************
+let modal = null;
 
-{
-  /* <a href="#modal1" class="js-modal"><button type="text" id="button-modify"><i
-						class="fa-solid fa-pen-to-square" id="icone"></i>modifier</button></a>
-			<aside id="modal1" class="modal" role="dialog" aria-modal="false" aria-labelledby="title-modal">      
-				<div class="modal-wrapper">
-					<h4 id="title-modal">Galerie photo</h4>
-					<p>Hello, little man. I will destroy you! Calculon is gonna kill us and it's all everybody else's
-						fault! You mean while I'm sleeping in it? Eeeee! Now say "nuclear wessels"! I videotape every
-						customer that comes in here, so that I may blackmail them later.</p>
-					<p>It doesn't look so shiny to me. Shut up and get to the point! Professor, make a woman out of me.  
-						Bender, we're trying our best. <strong> Fry!</strong> <em> Stay back!</em> He's too powerful!
-					</p>  
-					<input type="text">
-					<a href="#">coucou</a>
+// OUVERTURE
+const openModal = function (e) {
+  e.preventDefault();
+  const target = document.querySelector(e.target.getAttribute("href"));
+  target.style.display = null;
+  // retire le display none sur modal1
+  target.removeAttribute("aria-hidden");
+  target.setAttribute("aria-modal", true);
+  modal = target;
+  modal.addEventListener("click", closeModal);
+  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-stop")
+    .addEventListener("click", stopPropagation);
+};
 
-					<h3>I was all of history's great robot actors - Acting Unit 0.8; Thespomat; David Duchovny!</h3>
-					<p>Then throw her in the laundry room, which will hereafter be referred to as "the brig". I'm sure
-						those windmills will keep them cool. In your time, yes, but nowadays shut up! Besides, these are
-						adult stemcells, harvested from perfectly healthy adults whom I killed for their stemcells.</p>
-					<ul>  
-						<li>Are you crazy? I can't swallow that.</li>
-						<li>You can see how I lived before I met you.</li>
-						<li>Eeeee! Now say "nuclear wessels"!</li>
-					</ul>  
-				</div>  
-			</aside> */
-}
+// FERMETURE
+const closeModal = function (e) {
+  if (modal === null) return;
+  e.preventDefault();
+  modal.style.display = "none";
+  // retire le display none sur modal1
+  target.setAttribute("aria-hidden", true);
+  target.removeAttribute("aria-modal");
+  modal.removeEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-close")
+    .removeEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-stop")
+    .removeEventListener("click", stopPropagation);
+  modal = null;
+};
+
+const stopPropagation = function (e) {
+  e.stopPropagation();
+  // empeche la propagation de l'evenement sur les parents
+};
+
+document.querySelectorAll(".js-modal").forEach((a) => {
+  a.addEventListener("click", openModal);
+});

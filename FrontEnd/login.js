@@ -86,13 +86,7 @@ myForm.addEventListener("submit", function (e) {
     // si mon email et mon mot de passe est bon, je logue ma fonction qui permet de valider l'authentification avec le bon tokken
     loginUser();
     console.log("valide");
-    editionMode();
   }
-  // } else {
-  //   errorLogin.innerHTML = "Erreur dans l’identifiant ou le mot de passe";
-  //   errorLogin.style.color = "red";
-  //   console.log("non valide");
-  // }
 });
 
 // ************* API POST ***************
@@ -140,3 +134,6 @@ function loginUser() {
       errorLogin.style.color = "red";
     });
 }
+
+// headers: {
+//   // 'Authorization': 'Bearer VOTRE_TOKEN'
