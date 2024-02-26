@@ -150,16 +150,18 @@ modalContent.classList.add("js-modal-stop");
 
 // ***************** OUVERTURE ET FERMETURE DE LA MODALE *******************
 let modal = null;
+const focusableSelector = `button, a, input, textarea`;
+let focusablesElements = [];
 
 // OUVERTURE
 const openModal = function (e) {
   e.preventDefault();
-  const target = document.querySelector(e.target.getAttribute("href"));
-  target.style.display = null;
+  modal = document.querySelector(e.target.getAttribute("href"));
+  focusablesElements = Array.from(modal.querySelectorAll(focusableSelector));
+  modal.style.display = null;
   // retire le display none sur modal1
-  target.removeAttribute("aria-hidden");
-  target.setAttribute("aria-modal", true);
-  modal = target;
+  modal.removeAttribute("aria-hidden");
+  modal.setAttribute("aria-modal", true);
   modal.addEventListener("click", closeModal);
   modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
   modal
@@ -189,7 +191,30 @@ const stopPropagation = function (e) {
   e.stopPropagation();
   // empeche la propagation de l'evenement sur les parents
 };
+const focusInModal = function (e) {
+  e.preventDefault();
+  let index = focusablesElements.findIndex(
+    (f) => f === modal.querySelector(":focus")
+  );
+  index++;
+  if (index >= focusablesElements.length) {
+    index = 0;
+  }
+  focusablesElements[index].focus();
+};
 
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
+});
+
+// FERMER LA FENETRE AVEC LA TOUCHE ESCAPE
+// FOCUS
+
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.key === "Esc") {
+    closeModal(e);
+  }
+  if (e.key === "Tab" && modal !== null) {
+    focusInModal(e);
+  }
 });
