@@ -152,12 +152,15 @@ modalContent.classList.add("js-modal-stop");
 let modal = null;
 const focusableSelector = `button, a, input, textarea`;
 let focusablesElements = [];
+let previouslyFocusedElement = null;
 
 // OUVERTURE
 const openModal = function (e) {
   e.preventDefault();
   modal = document.querySelector(e.target.getAttribute("href"));
   focusablesElements = Array.from(modal.querySelectorAll(focusableSelector));
+  previouslyFocusedElement = document.querySelector(":focus");
+  focusablesElements[0].focus;
   modal.style.display = null;
   // retire le display none sur modal1
   modal.removeAttribute("aria-hidden");
@@ -172,6 +175,9 @@ const openModal = function (e) {
 // FERMETURE
 const closeModal = function (e) {
   if (modal === null) return;
+  if (previouslyFocusedElement !== null) {
+    previouslyFocusedElement.focus();
+  }
   e.preventDefault();
   modal.style.display = "none";
   // retire le display none sur modal1
@@ -196,9 +202,16 @@ const focusInModal = function (e) {
   let index = focusablesElements.findIndex(
     (f) => f === modal.querySelector(":focus")
   );
-  index++;
+  if (e.shiftKey === true) {
+    index--;
+  } else {
+    index++;
+  }
   if (index >= focusablesElements.length) {
     index = 0;
+  }
+  if (index < 0) {
+    index = focusablesElements.length - 1;
   }
   focusablesElements[index].focus();
 };
