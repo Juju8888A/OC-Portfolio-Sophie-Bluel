@@ -105,14 +105,14 @@ if (localStorage.getItem("token")) {
   // je crée ma barre d'édition en haut de page
   let modeEdition = document.createElement("div");
   modeEdition.id = "edition-bar";
-  modeEdition.innerHTML = "<p>Mode édition</p>";
+  modeEdition.innerHTML = `<i class="fa-solid fa-pen-to-square"></i><p>Mode édition</p>`;
   // je l'insère au dessus du header
   let header = document.querySelector("header");
   document.body.insertBefore(modeEdition, header);
 
   // je crée mon lien "modifier"
   let titleSection2 = document.getElementById("title-projects");
-  titleSection2.innerHTML += `<a class=lien-modif href=#modal1><i class="fa-solid fa-pen-to-square"></i>modifier</a>`;
+  titleSection2.innerHTML += `<a class=lien-modif href=#modal1><span class="i-modif"><i class="fa-solid fa-pen-to-square"></span></i>modifier</a>`;
   let lienModif = document.querySelector(".lien-modif");
   lienModif.classList.add("js-modal");
 
@@ -139,8 +139,7 @@ modalContainer.setAttribute("aria-labelledby", "titlemodal");
 modalContainer.setAttribute("style", "display:none;");
 // modalContainer.setAttribute("aria-modal", false);
 document.body.appendChild(modalContainer);
-modalContainer.innerHTML +=
-  "<div class=modal-wrapper><button class=js-modal-close>Fermer</button><h4 id=titlemodal>Galerie Photo</h4><div class=photos></div><hr id=barre><button>Ajouter une photo</div></div>";
+modalContainer.innerHTML += `<div class=modal-wrapper><div class="btn-close"><button class=js-modal-close><i class="fa-solid fa-xmark"></i></button></div><h4 id=titlemodal>Galerie Photo</h4><div class=photos></div><hr id=barre><div class="btn-ajout-photo"><button id="btn-add">Ajouter une photo</button></div></div>`;
 // pour gérer l'accessibilité, on utilise aria(améliore l'accessibilité)
 // par défaut la boite modal est caché "aria-hidden",
 // role dialog c'est pour indiquer une fenetre en dehors du contenu principal
