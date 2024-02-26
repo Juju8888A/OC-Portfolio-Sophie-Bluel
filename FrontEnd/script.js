@@ -179,7 +179,10 @@ const closeModal = function (e) {
     previouslyFocusedElement.focus();
   }
   e.preventDefault();
-  modal.style.display = "none";
+  window.setTimeout(function () {
+    modal.style.display = "none";
+    modal = null;
+  }, 500);
   // retire le display none sur modal1
   modal.setAttribute("aria-hidden", true);
   modal.removeAttribute("aria-modal");
@@ -190,7 +193,6 @@ const closeModal = function (e) {
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
-  modal = null;
 };
 
 const stopPropagation = function (e) {
