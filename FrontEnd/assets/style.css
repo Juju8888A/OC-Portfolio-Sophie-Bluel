@@ -370,27 +370,53 @@ input[type="email"]{
 	padding-right: 10px;
 }
 #titlemodal{
-	font-size: 2rem;
+	font-size: 1.8rem;
 	display: flex;
 	justify-content: center;
-	margin: 15px 0 15px 0;
+	margin: 15px 0 40px 0;
 }
-.photos{
-	height: 400px;
+.photos-container{
+	display: flex;
+	justify-content: center;
+	padding-left: 80px;
+	padding-right: 80px;
 }
-#barre{
-	margin: 50px 0 50px 0;
+.photos-content{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  	grid-template-rows: 1fr 1fr 1fr;
+  	gap: 10px;
+}
+.project-card-modif img{
+width: 80px;
+margin-bottom: 5px;
+}
+figure i {
+	position: relative;
+	left: 62px;
+	top: 20px;
+	font-size: 9px;
+	color: white;
+	background-color: black;
+	padding: 4px;
+	border-radius: 3px;
+}
+
+.barre{
+	width: 75%;
+	margin: 40px 0 30px 80px;
+	opacity: 0.4;
 }
 .btn-ajout-photo{
 	display: flex;
 	justify-content: center;
 }
 #btn-add{
-	padding: 10px 50px;
+	padding: 10px 40px;
 	border: 2px solid #1D6154;
 	border-radius: 25px;
 	font-family: 'Syne';
-	font-size: 1rem;
+	font-size: 0.9rem;
 	color: #FFFEF8;
 	background-color: #1D6154;
 	display: flex;

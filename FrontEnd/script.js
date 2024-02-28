@@ -19,6 +19,7 @@ async function fetchProjects() {
   console.log(projects);
   // une fois que le fetch est appliqué, j'appelle la fonction d'affichage
   projectsDisplay();
+  projectsModifDisplay();
 }
 
 // je récupère également les données categorie
@@ -139,7 +140,7 @@ modalContainer.setAttribute("aria-labelledby", "titlemodal");
 modalContainer.setAttribute("style", "display:none;");
 // modalContainer.setAttribute("aria-modal", false);
 document.body.appendChild(modalContainer);
-modalContainer.innerHTML += `<div class=modal-wrapper><div class="btn-close"><button class=js-modal-close><i class="fa-solid fa-xmark"></i></button></div><h4 id=titlemodal>Galerie Photo</h4><div class=photos></div><hr id=barre><div class="btn-ajout-photo"><button id="btn-add">Ajouter une photo</button></div></div>`;
+modalContainer.innerHTML += `<div class=modal-wrapper><div class="btn-close"><button class=js-modal-close><i class="fa-solid fa-xmark"></i></button></div><h4 id=titlemodal>Galerie Photo</h4><div class=photos-container><div class=photos-content></div></div><div class=barre><hr id=b-color></div><div class="btn-ajout-photo"><button id="btn-add">Ajouter une photo</button></div></div>`;
 // pour gérer l'accessibilité, on utilise aria(améliore l'accessibilité)
 // par défaut la boite modal est caché "aria-hidden",
 // role dialog c'est pour indiquer une fenetre en dehors du contenu principal
@@ -232,3 +233,20 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 });
+
+// CONTENU PROJETS DE LA MODALE
+
+const projectsModifContainer = document.querySelector(".photos-content");
+
+function projectsModifDisplay() {
+  projectsModifContainer.innerHTML = projects
+    .map(
+      (work) => `
+    <figure class="project-card-modif">
+    <i class="fa-solid fa-trash-can"></i>
+    <img src="${work.imageUrl}" alt="photo ${work.title}">
+    </figure>
+  `
+    )
+    .join("");
+}
