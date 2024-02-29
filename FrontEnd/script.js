@@ -131,110 +131,54 @@ if (localStorage.getItem("token")) {
 
 // ****************************** MODALE ************************************
 
+let btnModifier = document.querySelector(".lien-modif");
 let modalContainer = document.createElement("aside");
+let modalWrapper = document.createElement("div");
+let modalContentGallery = document.createElement("div");
+let modalContentAddPhoto = document.createElement("div");
+
+// Modale Attribute
 modalContainer.id = "modal1";
 modalContainer.classList.add("modal");
 modalContainer.setAttribute("aria-hidden", true);
 modalContainer.setAttribute("role", "dialog");
 modalContainer.setAttribute("aria-labelledby", "titlemodal");
 modalContainer.setAttribute("style", "display:none;");
-// modalContainer.setAttribute("aria-modal", false);
 document.body.appendChild(modalContainer);
-modalContainer.innerHTML += `<div class=modal-wrapper><div class="btn-close"><button class=js-modal-close><i class="fa-solid fa-xmark"></i></button></div><h4 id=titlemodal>Galerie Photo</h4><div class=photos-container><div class=photos-content></div></div><div class=barre><hr id=b-color></div><div class="btn-ajout-photo"><button id="btn-add">Ajouter une photo</button></div></div>`;
-// pour gérer l'accessibilité, on utilise aria(améliore l'accessibilité)
-// par défaut la boite modal est caché "aria-hidden",
-// role dialog c'est pour indiquer une fenetre en dehors du contenu principal
-// aria modal empeche l'interaction avec les elements sous la modal
-let modalContent = document.querySelector(".modal-wrapper");
-modalContent.classList.add("js-modal-stop");
 
-// ***************** OUVERTURE ET FERMETURE DE LA MODALE *******************
-let modal = null;
-const focusableSelector = `button, a, input, textarea`;
-let focusablesElements = [];
-let previouslyFocusedElement = null;
+// Modale Wrapper Attribute
+modalWrapper.classList.add("modal-wrapper");
+modalWrapper.classList.add("js-modal-stop");
+modalContainer.appendChild(modalWrapper);
 
-// OUVERTURE
-const openModal = function (e) {
-  e.preventDefault();
-  modal = document.querySelector(e.target.getAttribute("href"));
-  focusablesElements = Array.from(modal.querySelectorAll(focusableSelector));
-  previouslyFocusedElement = document.querySelector(":focus");
-  focusablesElements[0].focus;
-  modal.style.display = null;
-  // retire le display none sur modal1
-  modal.removeAttribute("aria-hidden");
-  modal.setAttribute("aria-modal", true);
-  modal.addEventListener("click", closeModal);
-  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
-  modal
-    .querySelector(".js-modal-stop")
-    .addEventListener("click", stopPropagation);
-};
+// Modale Gallery et AddPhoto Attribute
 
-// FERMETURE
-const closeModal = function (e) {
-  if (modal === null) return;
-  if (previouslyFocusedElement !== null) {
-    previouslyFocusedElement.focus();
-  }
-  e.preventDefault();
-  window.setTimeout(function () {
-    modal.style.display = "none";
-    modal = null;
-  }, 500);
-  // retire le display none sur modal1
-  modal.setAttribute("aria-hidden", true);
-  modal.removeAttribute("aria-modal");
-  modal.removeEventListener("click", closeModal);
-  modal
-    .querySelector(".js-modal-close")
-    .removeEventListener("click", closeModal);
-  modal
-    .querySelector(".js-modal-stop")
-    .removeEventListener("click", stopPropagation);
-};
+modalContentGallery.classList.add("modal-content1");
+modalWrapper.appendChild(modalContentGallery);
+modalContentAddPhoto.classList.add("modal-content2");
+modalWrapper.appendChild(modalContentAddPhoto);
 
-const stopPropagation = function (e) {
-  e.stopPropagation();
-  // empeche la propagation de l'evenement sur les parents
-};
-const focusInModal = function (e) {
-  e.preventDefault();
-  let index = focusablesElements.findIndex(
-    (f) => f === modal.querySelector(":focus")
-  );
-  if (e.shiftKey === true) {
-    index--;
-  } else {
-    index++;
-  }
-  if (index >= focusablesElements.length) {
-    index = 0;
-  }
-  if (index < 0) {
-    index = focusablesElements.length - 1;
-  }
-  focusablesElements[index].focus();
-};
+// Modale Gallery Display
 
-document.querySelectorAll(".js-modal").forEach((a) => {
-  a.addEventListener("click", openModal);
-});
+modalContentGallery.innerHTML = `
+<div class="btn-close">
+  <button class=js-modal-close>
+  <i class="fa-solid fa-xmark"></i></button>
+</div>
 
-// FERMER LA FENETRE AVEC LA TOUCHE ESCAPE
-// FOCUS
-
-window.addEventListener("keydown", function (e) {
-  if (e.key === "Escape" || e.key === "Esc") {
-    closeModal(e);
-  }
-  if (e.key === "Tab" && modal !== null) {
-    focusInModal(e);
-  }
-});
-
-// CONTENU PROJETS DE LA MODALE
+<h4 id=titlemodal>Galerie Photo</h4>
+<div class=photos-container>
+  <div class=photos-content>
+  </div>
+</div>
+<div class=barre>
+<hr id=b-color>
+</div>
+<div class="btn-ajout-photo">
+<button id="btn-add-1">Ajouter une photo</button>
+</div>
+  `;
+modalContentAddPhoto.style.display = "none";
 
 const projectsModifContainer = document.querySelector(".photos-content");
 
@@ -246,7 +190,142 @@ function projectsModifDisplay() {
     <i class="fa-solid fa-trash-can"></i>
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     </figure>
-  `
+    `
     )
     .join("");
 }
+
+// Modale AddPhoto Display
+
+const btnAddPhoto = document.getElementById("btn-add-1");
+const btnBackGallery = document.querySelector(".js-modal-back");
+console.log(btnBackGallery);
+
+modalContentAddPhoto.innerHTML = `
+<div class="btn-close-back">
+<button class="js-modal-back">
+<i class="fa-solid fa-arrow-left"></i></button>
+  <button class=js-modal-close>
+  <i class="fa-solid fa-xmark"></i></button>
+</div>
+<h4 id=titlemodal2>Ajout photo</h4>
+
+<div class=form-container>
+<form class=form-ajout-photo action="#" method="post">
+<div class=file-container>
+<div class="image-form"><i class="fa-solid fa-image"></i></div>
+<label for="fichier" class="btn-file">+ Ajouter photo</label>
+<input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
+<p>jpg, png : 4mo max</p></div>
+
+<div class="text-form-container">
+<label for="titre">Titre</label>
+<input type="text" name="titre" id="titre" class="style-form">
+</div>
+<div class="text-form-container">
+<label for="choix-category">Categorie</label>
+<select name="category-form" id="choix-category" class="style-form">
+<option value = ""></option>
+<option value = "objets">Objets</option>
+<option value = "objets">Appartements</option>
+<option value = "objets">Hotels & restaurants</option>
+</select>
+</div>
+
+<div class=barre2><hr id=b-color></div>
+<input type="submit" id="btn-valid" value="Valider" class="btn-ajout-photo"></form>
+</div>
+</div>
+  `;
+
+btnAddPhoto.addEventListener("click", (e) => {
+  e.preventDefault();
+  modalContentGallery.style.display = "none";
+  modalContentAddPhoto.style.display = null;
+});
+
+// **************************** OUVERTURE DE LA MODALE *********************************
+
+let modal = null;
+const focusableSelector = `button, a, input, textarea`;
+let focusables = [];
+let previouslyFocusedElement = null;
+
+const openModal = function (e) {
+  e.preventDefault();
+  modal = document.querySelector(e.target.getAttribute("href"));
+  focusables = Array.from(modal.querySelectorAll(focusableSelector));
+  previouslyFocusedElement = document.querySelector(":focus");
+  modal.style.display = null;
+  focusables[0].focus();
+  modal.removeAttribute("aria-hidden");
+  modal.setAttribute("aria-modal", true);
+  modal.addEventListener("click", closeModal);
+  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-stop")
+    .addEventListener("click", stopPropagation);
+};
+
+// **************************** FERMETURE DE LA MODALE *********************************
+
+const closeModal = function (e) {
+  if (modal === null) return;
+  if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
+  e.preventDefault();
+  window.setTimeout(function () {
+    modal.style.display = "none";
+    modal = null;
+  }, 500);
+  modal.setAttribute("aria-hidden", true);
+  modal.removeAttribute("aria-modal");
+  modal.removeEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-close")
+    .removeEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-stop")
+    .removeEventListener("click", stopPropagation);
+};
+document.querySelectorAll(".js-modal-back").forEach((a) => {
+  a.addEventListener("click", (f) => {
+    modalContentGallery.style.display = "";
+    modalContentAddPhoto.style.display = "none";
+  });
+});
+document.querySelectorAll(".js-modal-close").forEach((a) => {
+  a.addEventListener("click", closeModal);
+});
+document.querySelectorAll(".js-modal").forEach((a) => {
+  a.addEventListener("click", openModal);
+});
+
+const stopPropagation = function (e) {
+  e.stopPropagation();
+};
+
+const focusInModal = function (e) {
+  e.preventDefault();
+  let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
+  if (e.shiftKey === true) {
+    index--;
+  } else {
+    index++;
+  }
+  if (index >= focusables.length) {
+    index = 0;
+  }
+  if (index < 0) {
+    index = focusables.length - 1;
+  }
+  focusables[index].focus();
+};
+
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.key === "Esc") {
+    closeModal(e);
+  }
+  if (e.key === "Tab" && modal !== null) {
+    focusInModal(e);
+  }
+});

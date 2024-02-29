@@ -332,7 +332,8 @@ input[type="email"]{
 .modal-wrapper{
 	overflow: auto;
 	/* en cas de debordement, une barre scroll apparait */
-	width: 600px;
+	width: 580px;
+	height: 600px;
 	border-radius: 10px;
 	max-width: calc(100vw - 20px);
 	max-height: calc(100vh - 20px);
@@ -343,6 +344,10 @@ input[type="email"]{
 .btn-close{
 	display: flex;
 	justify-content: flex-end;
+}
+.btn-close-back{
+	display: flex;
+	justify-content: space-between;
 }
 .modal-wrapper button {
 	border: none;
@@ -373,7 +378,13 @@ input[type="email"]{
 	font-size: 1.8rem;
 	display: flex;
 	justify-content: center;
-	margin: 15px 0 40px 0;
+	margin: 8px 0 20px 0;
+}
+#titlemodal2 {
+	font-size: 1.8rem;
+	display: flex;
+	justify-content: center;
+	margin: 8px 0 25px 0;
 }
 .photos-container{
 	display: flex;
@@ -388,12 +399,12 @@ input[type="email"]{
   	gap: 10px;
 }
 .project-card-modif img{
-width: 80px;
+width: 75px;
 margin-bottom: 5px;
 }
 figure i {
 	position: relative;
-	left: 62px;
+	left: 56px;
 	top: 20px;
 	font-size: 9px;
 	color: white;
@@ -404,14 +415,10 @@ figure i {
 
 .barre{
 	width: 75%;
-	margin: 40px 0 30px 80px;
+	margin: 20px 0 30px 80px;
 	opacity: 0.4;
 }
-.btn-ajout-photo{
-	display: flex;
-	justify-content: center;
-}
-#btn-add{
+#btn-add-1{
 	padding: 10px 40px;
 	border: 2px solid #1D6154;
 	border-radius: 25px;
@@ -420,9 +427,76 @@ figure i {
 	color: #FFFEF8;
 	background-color: #1D6154;
 	display: flex;
-	justify-content: center;
-	margin-bottom: 25px;
 }
+
+
+/* MODALE AJOUT PHOTO */
+.form-container{
+	padding-left: 80px;
+	padding-right: 80px;
+	height: 500px;
+}
+.form-ajout-photo{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.text-form-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+.style-form{
+	padding: 15px;
+	border: none;
+	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.1));
+}
+.file-container {
+	background-color: #E8F1F6;
+	height: 140px;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	margin-bottom: 30px;
+}
+.file-container p {
+	font-size: 0.7rem;
+}
+.image-form i {
+	font-size: 70px;
+	color: #CBD6DC;
+	
+}
+.btn-file{
+	cursor: pointer;
+	color: #306685;
+	font-weight: bold;
+	background-color: #CBD6DC;
+	padding:  10px 30px;
+	border-radius: 20px;
+}
+.barre2{
+	opacity: 0.5;
+	margin: 5px 0 0 0;
+}
+.btn-ajout-photo{
+	display: flex;
+	justify-content: center;
+	padding: 8px 100px;
+	border: none;
+	border-radius: 25px;
+}
+#btn-valid{
+	background-color: #A7A7A7;
+}
+
+/* *:focus {
+	box-shadow: 0 0 10px blue;} */
+
 
 /* *************  ANIMATION OUVERTURE ET FERMETURE DE LA MODALE ****************** */
 
