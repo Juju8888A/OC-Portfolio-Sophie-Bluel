@@ -134,6 +134,3 @@ function loginUser() {
       errorLogin.style.color = "red";
     });
 }
-
-// headers: {
-//   // 'Authorization': 'Bearer VOTRE_TOKEN'

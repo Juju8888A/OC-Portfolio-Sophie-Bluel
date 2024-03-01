@@ -187,7 +187,7 @@ function projectsModifDisplay() {
     .map(
       (work) => `
     <figure class="project-card-modif">
-    <i class="fa-solid fa-trash-can"></i>
+    <i id=trash class="fa-solid fa-trash-can"></i>
     <img src="${work.imageUrl}" alt="photo ${work.title}">
     </figure>
     `
@@ -209,34 +209,50 @@ modalContentAddPhoto.innerHTML = `
   <i class="fa-solid fa-xmark"></i></button>
 </div>
 <h4 id=titlemodal2>Ajout photo</h4>
-
 <div class=form-container>
 <form class=form-ajout-photo action="#" method="post">
 <div class=file-container>
-<div class="image-form"><i class="fa-solid fa-image"></i></div>
-<label for="fichier" class="btn-file">+ Ajouter photo</label>
-<input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
-<p>jpg, png : 4mo max</p></div>
+      <div class="image-form"><i class="fa-solid fa-image"></i></div>
+      <label for="fichier" class="btn-file">+ Ajouter photo</label>
+      <input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
+      <p>jpg, png : 4mo max</p></div>
+    <div class="text-form-container">
+      <label for="titre">Titre</label>
+      <input type="text" name="titre" id="titre" class="style-form">
+    </div>
+    <div class="text-form-container">
+      <label for="choix-category">Categorie</label>
+        <select name="category-form" id="choix-category" class="style-form">
+          
+        </select>
+    </div>
+    <div class=barre2><hr id=b-color></div>
+      <input type="submit" id="btn-valid" value="Valider" class="btn-ajout-photo"></form>
+    </div>
 
-<div class="text-form-container">
-<label for="titre">Titre</label>
-<input type="text" name="titre" id="titre" class="style-form">
-</div>
-<div class="text-form-container">
-<label for="choix-category">Categorie</label>
-<select name="category-form" id="choix-category" class="style-form">
-<option value = ""></option>
-<option value = "objets">Objets</option>
-<option value = "objets">Appartements</option>
-<option value = "objets">Hotels & restaurants</option>
-</select>
-</div>
-
-<div class=barre2><hr id=b-color></div>
-<input type="submit" id="btn-valid" value="Valider" class="btn-ajout-photo"></form>
-</div>
+</form>
 </div>
   `;
+
+// Formulaire dynamique
+
+let categorie = category.name;
+// Objets
+const formCategory = document.getElementById("choix-category");
+const optionObjets = document.createElement("option");
+optionObjets.setAttribute("value", categorie);
+optionObjets.innerText = "Objets";
+formCategory.appendChild(optionObjets);
+// Appartements
+const optionAppartements = document.createElement("option");
+optionAppartements.setAttribute("value", categorie);
+optionAppartements.innerText = "Appartements";
+formCategory.appendChild(optionAppartements);
+// Hotels et restaurants
+const optionHotelResto = document.createElement("option");
+optionHotelResto.setAttribute("value", categorie);
+optionHotelResto.innerText = "Hotels & restaurants";
+formCategory.appendChild(optionHotelResto);
 
 btnAddPhoto.addEventListener("click", (e) => {
   e.preventDefault();
@@ -287,6 +303,7 @@ const closeModal = function (e) {
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
 };
+
 document.querySelectorAll(".js-modal-back").forEach((a) => {
   a.addEventListener("click", (f) => {
     modalContentGallery.style.display = "";
@@ -329,3 +346,73 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 });
+
+// ***************************** SUPPRESSION D'UN PROJET ************************************
+
+// récupération du bouton poubelle
+// quand je clique dessus je veux que le projet soit supprimé
+const projectsToDelete = document
+  .querySelectorAll(".project-card-modif")
+  .forEach((trash) => {
+    trash = document.getElementById("trash");
+    trash.addEventListener("click", deleteProjects);
+  });
+
+function deleteProjects() {
+  let dataId = {
+    id: projects.id,
+  };
+
+  let urlDelete = "http://localhost:5678/api/works/{dataId}";
+
+  let fetchDelete = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${dataUser.token}`,
+    },
+    body: JSON.stringify(dataId),
+  };
+
+  fetch(urlDelete, fetchDelete)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Echec de la supression");
+      }
+    })
+    .catch((error) => {
+      console.log("Echec de la supression", error);
+    });
+}
+
+// ******************************* AJOUT D'UN PROJET ************************************
+const btnValidationAjout = document.getElementById("btn-valid");
+btnValidationAjout.addEventListener("click", AddProjects);
+
+function AddProjects() {
+  let dataProjects = {
+    image: projects.imageUrl,
+    title: projects.title,
+    category: category.name,
+  };
+
+  let urlAdd = "http://localhost:5678/api/works/{dataProjects}";
+
+  let fetchAdd = {
+    method: "PUT",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${dataUser.token}`,
+    },
+    body: JSON.stringify(dataProjects),
+  };
+
+  fetch(urlAdd, fetchAdd)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Echec de l'ajout");
+      }
+    })
+    .catch((error) => {
+      console.log("Echec de l'ajout", error);
+    });
+}
