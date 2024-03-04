@@ -15,11 +15,11 @@ let category = [];
 async function fetchProjects() {
   await fetch("http://localhost:5678/api/works")
     .then((res) => res.json())
-    .then((data) => (projects = data));
-  console.log(projects);
-  // une fois que le fetch est appliqué, j'appelle la fonction d'affichage
-  projectsDisplay();
-  projectsModifDisplay();
+    .then((data) => {
+      projects = data;
+      console.log(projects);
+      projectsDisplay();
+    });
 }
 
 // je récupère également les données categorie
@@ -30,67 +30,74 @@ async function fetchCategory() {
   console.log(category);
 }
 
-// je crée ma fonction d'affichage / categorie : tous / grace aux méthodes filter et map
+// je crée les éléments figure qui contiendront les projets de l'architecte grâce aux données de l'API
+
 function projectsDisplay() {
-  projectsContainer.innerHTML = projects
-    .filter((work) => work.category.name)
-    .map(
-      (work) => `
-    <figure class="project-card">
-    <img src="${work.imageUrl}" alt="photo ${work.title}">
-    <figcaption>${work.title}</figcaption>
-    </figure>
-    `
-    )
-    .join("");
+  projects.forEach((project) => {
+    const figureElement = document.createElement("figure");
+    let imageElement = document.createElement("img");
+    let captionElement = document.createElement("figcaption");
+    figureElement.classList.add("project-card");
+    figureElement.id = project.id;
+    imageElement.src = project.imageUrl;
+    imageElement.alt = "image de " + project.title;
+    captionElement.textContent = project.title;
+    projectsContainer.appendChild(figureElement);
+    figureElement.appendChild(imageElement);
+    figureElement.appendChild(captionElement);
+  });
 }
 
-// je crée ma fonction d'affichage / categorie : objets
+// je crée l'affichage de mes projets filtrés
+
+function projectsDisplayFiltered(filteredProjects) {
+  projectsContainer.innerHTML = "";
+  filteredProjects.forEach((project) => {
+    const figureElement = document.createElement("figure");
+    let imageElement = document.createElement("img");
+    let captionElement = document.createElement("figcaption");
+    figureElement.classList.add("project-card");
+    figureElement.id = project.id;
+    imageElement.src = project.imageUrl;
+    imageElement.alt = "image de " + project.title;
+    captionElement.textContent = project.title;
+    projectsContainer.appendChild(figureElement);
+    figureElement.appendChild(imageElement);
+    figureElement.appendChild(captionElement);
+  });
+}
+
+// Affichage objets
+
 function projectsDisplayObjets() {
-  projectsContainer.innerHTML = projects
-    .filter((work) => work.category.name.includes("Objets"))
-    .map(
-      (work) => `
-    <figure class="project-card">
-    <img src="${work.imageUrl}" alt="photo ${work.title}">
-    <figcaption>${work.title}</figcaption>
-    </figure>
-    `
-    )
-    .join("");
+  const filteredProjects = projects.filter(
+    (project) => project.category.name === "Objets"
+  );
+  projectsDisplayFiltered(filteredProjects);
 }
 
-// je crée ma fonction d'affichage / categorie : appartements
+// Affichage appartements
+
 function projectsDisplayAppartements() {
-  projectsContainer.innerHTML = projects
-    .filter((work) => work.category.name.includes("Appartements"))
-    .map(
-      (work) => `
-    <figure class="project-card">
-    <img src="${work.imageUrl}" alt="photo ${work.title}">
-    <figcaption>${work.title}</figcaption>
-    </figure>
-    `
-    )
-    .join("");
+  filteredProjects = projects.filter(
+    (project) => project.category.name === "Appartements"
+  );
+  projectsDisplayFiltered(filteredProjects);
 }
 
-// je crée ma fonction d'affichage / categorie : hotels et restaurants
+// Affichage hotels et restaurants
+
 function projectsDisplayHotelResto() {
-  projectsContainer.innerHTML = projects
-    .filter((work) => work.category.name.includes("Hotels & restaurants"))
-    .map(
-      (work) => `
-    <figure class="project-card">
-    <img src="${work.imageUrl}" alt="photo ${work.title}">
-    <figcaption>${work.title}</figcaption>
-    </figure>
-    `
-    )
-    .join("");
+  filteredProjects = projects.filter(
+    (project) => project.category.name === "Hotels & restaurants"
+  );
+  projectsDisplayFiltered(filteredProjects);
 }
 
-buttonTous.addEventListener("click", projectsDisplay);
+buttonTous.addEventListener("click", (e) => {
+  e.preventDefault();
+  projectsDisplay();
+});
 buttonObjets.addEventListener("click", projectsDisplayObjets);
 buttonAppartements.addEventListener("click", projectsDisplayAppartements);
 buttonHotelResto.addEventListener("click", projectsDisplayHotelResto);
@@ -182,19 +189,6 @@ modalContentAddPhoto.style.display = "none";
 
 const projectsModifContainer = document.querySelector(".photos-content");
 
-function projectsModifDisplay() {
-  projectsModifContainer.innerHTML = projects
-    .map(
-      (work) => `
-    <figure class="project-card-modif">
-    <i id=trash class="fa-solid fa-trash-can"></i>
-    <img src="${work.imageUrl}" alt="photo ${work.title}">
-    </figure>
-    `
-    )
-    .join("");
-}
-
 // Modale AddPhoto Display
 
 const btnAddPhoto = document.getElementById("btn-add-1");
@@ -212,10 +206,13 @@ modalContentAddPhoto.innerHTML = `
 <div class=form-container>
 <form class=form-ajout-photo action="#" method="post">
 <div class=file-container>
+<div class=display-photo></div>
+<div class=ajouter-photo>
       <div class="image-form"><i class="fa-solid fa-image"></i></div>
       <label for="fichier" class="btn-file">+ Ajouter photo</label>
       <input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
       <p>jpg, png : 4mo max</p></div>
+      </div>
     <div class="text-form-container">
       <label for="titre">Titre</label>
       <input type="text" name="titre" id="titre" class="style-form">
@@ -233,6 +230,37 @@ modalContentAddPhoto.innerHTML = `
 </form>
 </div>
   `;
+
+// Upload image dynamique
+
+const btnUploadImage = document.getElementById("fichier");
+btnUploadImage.addEventListener("change", loadedFile);
+
+function loadedFile() {
+  const fileRegExp = /\.(jpe?g|png|gif)$/i;
+  if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
+    return;
+  }
+  console.log("Ce fichier est accepté");
+
+  const image = this.files[0];
+  const imageReader = new FileReader();
+  imageReader.readAsDataURL(image);
+  imageReader.addEventListener("load", (event) => {
+    displayImage(event, image);
+  });
+}
+
+function displayImage(event, file) {
+  const figureElement = document.createElement("figure");
+  figureElement.id = "image-selected";
+  const imageElement = document.createElement("img");
+  imageElement.src = event.target.result;
+
+  figureElement.appendChild(imageElement);
+  const imageDisplay = document.querySelector(".display-photo");
+  imageDisplay.appendChild(figureElement);
+}
 
 // Formulaire dynamique
 
