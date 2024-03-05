@@ -378,7 +378,7 @@ input[type="email"]{
 	font-size: 1.8rem;
 	display: flex;
 	justify-content: center;
-	margin: 8px 0 20px 0;
+	margin: 8px 0 40px 0;
 }
 #titlemodal2 {
 	font-size: 1.8rem;
@@ -398,14 +398,17 @@ input[type="email"]{
   	grid-template-rows: 1fr 1fr 1fr;
   	gap: 10px;
 }
-.project-card-modif img{
-width: 75px;
-margin-bottom: 5px;
-}
-figure i {
+.project-card-modif {
 	position: relative;
-	left: 56px;
-	top: 20px;
+}
+.project-card-modif img{
+	width: 75px;
+	margin-bottom: 5px;
+}
+#trash {
+	position: absolute;
+	top: 4px;
+	right: 4px;
 	font-size: 9px;
 	color: white;
 	background-color: black;
@@ -456,19 +459,25 @@ figure i {
 }
 .file-container {
 	background-color: #E8F1F6;
-	height: 140px;
+	height: 180px;
 	display: flex;
 	justify-content: center;
-	padding: 20px;
+	
 	margin-bottom: 30px;
 }
 .display-photo{
+	width: 135px;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 }
+.display-photo figure {
+	display: flex;
+	height: 100%;
+	
+}
 .ajouter-photo{
+	padding: 20px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -503,6 +512,12 @@ figure i {
 }
 #btn-valid{
 	background-color: #A7A7A7;
+	padding: 10px 40px;
+	border: 2px solid #A7A7A7;
+	border-radius: 25px;
+	font-family: 'Syne';
+	font-size: 0.9rem;
+	color: #FFFEF8;
 }
 
 /* *:focus {

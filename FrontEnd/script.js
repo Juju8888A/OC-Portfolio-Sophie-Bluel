@@ -19,6 +19,8 @@ async function fetchProjects() {
       projects = data;
       console.log(projects);
       projectsDisplay();
+      projectsDisplayModif();
+      chooseCategory();
     });
 }
 
@@ -189,6 +191,22 @@ modalContentAddPhoto.style.display = "none";
 
 const projectsModifContainer = document.querySelector(".photos-content");
 
+function projectsDisplayModif() {
+  projects.forEach((project) => {
+    const figureElementModif = document.createElement("figure");
+    const trashElement = document.createElement("i");
+    trashElement.id = "trash";
+    trashElement.classList.add("fa-solid", "fa-trash-can");
+    let imageElementModif = document.createElement("img");
+    imageElementModif.src = project.imageUrl;
+    figureElementModif.classList.add("project-card-modif");
+    figureElementModif.id = project.id;
+    projectsModifContainer.appendChild(figureElementModif);
+    figureElementModif.appendChild(imageElementModif);
+    figureElementModif.appendChild(trashElement);
+  });
+}
+
 // Modale AddPhoto Display
 
 const btnAddPhoto = document.getElementById("btn-add-1");
@@ -234,7 +252,9 @@ modalContentAddPhoto.innerHTML = `
 // Upload image dynamique
 
 const btnUploadImage = document.getElementById("fichier");
-btnUploadImage.addEventListener("change", loadedFile);
+const imageDisplay = document.querySelector(".display-photo");
+const formDisplay = document.querySelector(".form-photo");
+imageDisplay.style.display = "none";
 
 function loadedFile() {
   const fileRegExp = /\.(jpe?g|png|gif)$/i;
@@ -258,29 +278,38 @@ function displayImage(event, file) {
   imageElement.src = event.target.result;
 
   figureElement.appendChild(imageElement);
-  const imageDisplay = document.querySelector(".display-photo");
   imageDisplay.appendChild(figureElement);
+  imageDisplay.style.display = "block";
+
+  if (imageDisplay.style.display === "block") {
+    formDisplay.style.display = "none";
+  }
 }
 
-// Formulaire dynamique
+btnUploadImage.addEventListener("change", loadedFile);
 
-let categorie = category.name;
-// Objets
+// Formulaire dynamique
 const formCategory = document.getElementById("choix-category");
-const optionObjets = document.createElement("option");
-optionObjets.setAttribute("value", categorie);
-optionObjets.innerText = "Objets";
-formCategory.appendChild(optionObjets);
-// Appartements
-const optionAppartements = document.createElement("option");
-optionAppartements.setAttribute("value", categorie);
-optionAppartements.innerText = "Appartements";
-formCategory.appendChild(optionAppartements);
-// Hotels et restaurants
-const optionHotelResto = document.createElement("option");
-optionHotelResto.setAttribute("value", categorie);
-optionHotelResto.innerText = "Hotels & restaurants";
-formCategory.appendChild(optionHotelResto);
+
+// Objets
+function chooseCategory() {
+  projects.forEach((project) => {
+    const optionObjets = document.createElement("option");
+    optionObjets.setAttribute("value", project.category.name);
+    optionObjets.innerText = "Objets";
+    formCategory.appendChild(optionObjets);
+    // Appartements
+    const optionAppartements = document.createElement("option");
+    optionAppartements.setAttribute("value", project.category.name);
+    optionAppartements.innerText = "Appartements";
+    formCategory.appendChild(optionAppartements);
+    // Hotels et restaurants
+    const optionHotelResto = document.createElement("option");
+    optionHotelResto.setAttribute("value", project.category.name);
+    optionHotelResto.innerText = "Hotels & restaurants";
+    formCategory.appendChild(optionHotelResto);
+  });
+}
 
 btnAddPhoto.addEventListener("click", (e) => {
   e.preventDefault();
@@ -378,69 +407,92 @@ window.addEventListener("keydown", function (e) {
 // ***************************** SUPPRESSION D'UN PROJET ************************************
 
 // récupération du bouton poubelle
-// quand je clique dessus je veux que le projet soit supprimé
-const projectsToDelete = document
-  .querySelectorAll(".project-card-modif")
-  .forEach((trash) => {
-    trash = document.getElementById("trash");
-    trash.addEventListener("click", deleteProjects);
-  });
+// quand je clique dessus je veux qu'un projet soit supprimé
+
+const projectsModified = document.querySelectorAll(
+  "project-card-modif, project-card"
+);
+console.log(projectsModified);
+
+const trash = document.getElementById("trash");
+trash.addEventListener("click", deleteProjects);
 
 function deleteProjects() {
-  let dataId = {
-    id: projects.id,
-  };
+  projectsModified.forEach((project) => {
+    let dataId = {
+      id: project.id,
+    };
 
-  let urlDelete = "http://localhost:5678/api/works/{dataId}";
+    let urlDelete = `http://localhost:5678/api/works/${dataId}`;
 
-  let fetchDelete = {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${dataUser.token}`,
-    },
-    body: JSON.stringify(dataId),
-  };
+    let fetchDelete = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${dataUser.token}`,
+      },
+      body: JSON.stringify(dataId),
+    };
 
-  fetch(urlDelete, fetchDelete)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Echec de la supression");
-      }
-    })
-    .catch((error) => {
-      console.log("Echec de la supression", error);
-    });
+    fetch(urlDelete, fetchDelete)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Echec de la supression");
+        } else {
+          console.log("Projet supprimé avec succès");
+        }
+      })
+      .catch((error) => {
+        console.log("Echec de la supression", error);
+      });
+  });
 }
 
 // ******************************* AJOUT D'UN PROJET ************************************
 const btnValidationAjout = document.getElementById("btn-valid");
+const inputTitre = document.getElementById("titre");
+
+btnValidationAjout.addEventListener("change", (f) => {
+  if (
+    imageDisplay.style.display === "block" &&
+    !inputTitre === "" &&
+    !formCategory === ""
+  ) {
+    btnValidationAjout.style.backgroundColor = "#1D6154";
+  }
+});
+
 btnValidationAjout.addEventListener("click", AddProjects);
 
 function AddProjects() {
-  let dataProjects = {
-    image: projects.imageUrl,
-    title: projects.title,
-    category: category.name,
-  };
+  projectsModified.forEach((project) => {
+    let dataProjects = {
+      image: project.imageUrl,
+      title: project.title,
+      category: project.category.name,
+    };
 
-  let urlAdd = "http://localhost:5678/api/works/{dataProjects}";
+    let urlAdd = `http://localhost:5678/api/works/${dataProjects}`;
 
-  let fetchAdd = {
-    method: "PUT",
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${dataUser.token}`,
-    },
-    body: JSON.stringify(dataProjects),
-  };
+    let fetchAdd = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${dataUser.token}`,
+      },
+      body: JSON.stringify(dataProjects),
+    };
 
-  fetch(urlAdd, fetchAdd)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Echec de l'ajout");
-      }
-    })
-    .catch((error) => {
-      console.log("Echec de l'ajout", error);
-    });
+    fetch(urlAdd, fetchAdd)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Echec de l'ajout");
+        } else {
+          console.log("Projet ajouté avec succès");
+        }
+      })
+      .catch((error) => {
+        console.log("Echec de l'ajout", error);
+      });
+  });
 }
