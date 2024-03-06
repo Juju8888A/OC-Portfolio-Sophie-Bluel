@@ -114,14 +114,15 @@ li:hover {
 #introduction {
 	display: flex;
 	align-items: center;
+	padding-left: 60px;
+	padding-right: 60px;
+	gap: 80px;
 }
 #introduction figure {
 	flex: 1
 }
 #introduction img {
-	display: block;
-	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
@@ -132,7 +133,11 @@ li:hover {
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 15px;
+}
+#portfolio{
+	padding-left: 60px;
+	padding-right: 60px;
 }
 #portfolio h2 {
 	text-align: center;
@@ -176,9 +181,9 @@ li:hover {
 
 }
 #contact {
-	width: 50%;
-margin: auto;
-margin-bottom: 30px;
+	width: 35%;
+	margin: auto;
+	margin-bottom: 30px;
 }
 #contact > * {
 	text-align: center;
@@ -473,6 +478,7 @@ input[type="email"]{
 }
 .display-photo figure {
 	display: flex;
+	justify-content: center;
 	height: 100%;
 	
 }

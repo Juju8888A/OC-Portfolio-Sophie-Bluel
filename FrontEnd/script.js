@@ -212,7 +212,6 @@ function projectsDisplayModif() {
 
 const btnAddPhoto = document.getElementById("btn-add-1");
 const btnBackGallery = document.querySelector(".js-modal-back");
-console.log(btnBackGallery);
 
 modalContentAddPhoto.innerHTML = `
 <div class="btn-close-back">
@@ -225,8 +224,8 @@ modalContentAddPhoto.innerHTML = `
 <div class=form-container>
 <form class=form-ajout-photo action="#" method="post">
 <div class=file-container>
-<div class=display-photo></div>
-<div class=ajouter-photo>
+<div id=form-result-image class=display-photo></div>
+<div id=form-add-photo class=ajouter-photo>
       <div class="image-form"><i class="fa-solid fa-image"></i></div>
       <label for="fichier" class="btn-file">+ Ajouter photo</label>
       <input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
@@ -237,8 +236,9 @@ modalContentAddPhoto.innerHTML = `
       <input type="text" name="titre" id="titre" class="style-form">
     </div>
     <div class="text-form-container">
-      <label for="choix-category">Categorie</label>
+      <label for="choix-category">Catégorie</label>
         <select name="category-form" id="choix-category" class="style-form">
+        <option>Sélectionnez une catégorie</option>
           
         </select>
     </div>
@@ -252,9 +252,19 @@ modalContentAddPhoto.innerHTML = `
 
 // Upload image dynamique
 
+// div ajouter-photo
+
+// const divAjoutPhoto= document.createElement("div");
+// divAjoutPhoto.id = "form-result";
+// divAjoutPhoto.classList.add("ajouter-photo");
+// const divIcone= document.createElement("div");
+// divIcone.classList.add("image-form")
+
+// div display-photo
+
 const btnUploadImage = document.getElementById("fichier");
-const imageDisplay = document.querySelector(".display-photo");
-const formDisplay = document.querySelector(".form-photo");
+const imageDisplay = document.getElementById("form-result-image");
+const formDisplay = document.getElementById("form-add-photo");
 imageDisplay.style.display = "none";
 
 function loadedFile() {
@@ -295,10 +305,13 @@ const formCategory = document.getElementById("choix-category");
 // Objets
 function chooseCategory() {
   category.forEach((category) => {
-    const optionObjets = document.createElement("option");
-    optionObjets.setAttribute("value", category.name);
-    optionObjets.innerText = category.name;
-    formCategory.appendChild(optionObjets);
+    // const optionChoisir = document.createElement("option");
+    // optionChoisir.innerText = "Choisir une categorie";
+    // formCategory.appendChild(optionChoisir);
+    const optionCategorie = document.createElement("option");
+    optionCategorie.setAttribute("value", category.name);
+    optionCategorie.innerText = category.name;
+    formCategory.appendChild(optionCategorie);
   });
 }
 
