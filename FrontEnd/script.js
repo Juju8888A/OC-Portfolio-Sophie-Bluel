@@ -20,7 +20,6 @@ async function fetchProjects() {
       console.log(projects);
       projectsDisplay();
       projectsDisplayModif();
-      chooseCategory();
     });
 }
 
@@ -30,11 +29,13 @@ async function fetchCategory() {
     .then((res) => res.json())
     .then((data) => (category = data));
   console.log(category);
+  chooseCategory();
 }
 
 // je crée les éléments figure qui contiendront les projets de l'architecte grâce aux données de l'API
 
 function projectsDisplay() {
+  projectsContainer.innerHTML = "";
   projects.forEach((project) => {
     const figureElement = document.createElement("figure");
     let imageElement = document.createElement("img");
@@ -293,21 +294,11 @@ const formCategory = document.getElementById("choix-category");
 
 // Objets
 function chooseCategory() {
-  projects.forEach((project) => {
+  category.forEach((category) => {
     const optionObjets = document.createElement("option");
-    optionObjets.setAttribute("value", project.category.name);
-    optionObjets.innerText = "Objets";
+    optionObjets.setAttribute("value", category.name);
+    optionObjets.innerText = category.name;
     formCategory.appendChild(optionObjets);
-    // Appartements
-    const optionAppartements = document.createElement("option");
-    optionAppartements.setAttribute("value", project.category.name);
-    optionAppartements.innerText = "Appartements";
-    formCategory.appendChild(optionAppartements);
-    // Hotels et restaurants
-    const optionHotelResto = document.createElement("option");
-    optionHotelResto.setAttribute("value", project.category.name);
-    optionHotelResto.innerText = "Hotels & restaurants";
-    formCategory.appendChild(optionHotelResto);
   });
 }
 
