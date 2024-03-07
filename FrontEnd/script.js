@@ -193,11 +193,13 @@ modalContentAddPhoto.style.display = "none";
 const projectsModifContainer = document.querySelector(".photos-content");
 
 function projectsDisplayModif() {
+  projectsModifContainer.innerHTML = "";
   projects.forEach((project) => {
     const figureElementModif = document.createElement("figure");
     const trashElement = document.createElement("i");
-    trashElement.id = "trash";
-    trashElement.classList.add("fa-solid", "fa-trash-can");
+    trashElement.addEventListener("click", deleteProject);
+    trashElement.id = "trash-" + project.id;
+    trashElement.classList.add("fa-solid", "fa-trash-can", "trash-position");
     let imageElementModif = document.createElement("img");
     imageElementModif.src = project.imageUrl;
     figureElementModif.classList.add("project-card-modif");
@@ -252,16 +254,6 @@ modalContentAddPhoto.innerHTML = `
 
 // Upload image dynamique
 
-// div ajouter-photo
-
-// const divAjoutPhoto= document.createElement("div");
-// divAjoutPhoto.id = "form-result";
-// divAjoutPhoto.classList.add("ajouter-photo");
-// const divIcone= document.createElement("div");
-// divIcone.classList.add("image-form")
-
-// div display-photo
-
 const btnUploadImage = document.getElementById("fichier");
 const imageDisplay = document.getElementById("form-result-image");
 const formDisplay = document.getElementById("form-add-photo");
@@ -305,9 +297,6 @@ const formCategory = document.getElementById("choix-category");
 // Objets
 function chooseCategory() {
   category.forEach((category) => {
-    // const optionChoisir = document.createElement("option");
-    // optionChoisir.innerText = "Choisir une categorie";
-    // formCategory.appendChild(optionChoisir);
     const optionCategorie = document.createElement("option");
     optionCategorie.setAttribute("value", category.name);
     optionCategorie.innerText = category.name;
@@ -410,46 +399,55 @@ window.addEventListener("keydown", function (e) {
 
 // ***************************** SUPPRESSION D'UN PROJET ************************************
 
-// récupération du bouton poubelle
+// récupération de l'id du bouton poubelle
 // quand je clique dessus je veux qu'un projet soit supprimé
 
-const projectsModified = document.querySelectorAll(
-  "project-card-modif, project-card"
-);
-console.log(projectsModified);
+// ma fonction deleteProject
+function deleteProject(event) {
+  const elementId = event.target.id;
+  console.log(elementId);
+  const deleteId = elementId.split("-")[1];
+  // je stocke mon id dans une variable
+  // je sépare mon id trash d'un "-" pour récupérer ensuite que le numéro de la poubelle (index)
 
-const trash = document.getElementById("trash");
-trash.addEventListener("click", deleteProjects);
+  // je crée donc la requete DELETE avec les informations suivantes
+  let data = {
+    id: deleteId,
+  };
 
-function deleteProjects() {
-  projectsModified.forEach((project) => {
-    let dataId = {
-      id: project.id,
-    };
+  let urlDelete = `http://localhost:5678/api/works/${data}`;
 
-    let urlDelete = `http://localhost:5678/api/works/${dataId}`;
+  // ma requête DELETE
+  let fetchDelete = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
 
-    let fetchDelete = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${dataUser.token}`,
-      },
-      body: JSON.stringify(dataId),
-    };
+  fetch(urlDelete, fetchDelete)
+    .then((response) => {
+      console.log("Server response: ", response);
+      if (!response.ok) {
+        throw new Error("Echec de la supression");
+      } else {
+        console.log("Projet supprimé avec succès");
 
-    fetch(urlDelete, fetchDelete)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Echec de la supression");
-        } else {
-          console.log("Projet supprimé avec succès");
-        }
-      })
-      .catch((error) => {
-        console.log("Echec de la supression", error);
-      });
-  });
+        // dans mon tableau, je souhaite filtrer, conserver uniquement les éléments dont l'ID est différent de deleteId
+        projects = projects.filter((e) => {
+          console.log(e.id, parseInt(deleteId));
+          return e.id !== parseInt(deleteId);
+        });
+        console.log(projects);
+        // je mets à jour mes affichages
+        projectsDisplayModif();
+        projectsDisplay();
+      }
+    })
+    .catch((error) => {
+      console.log("Echec de la supression", error);
+    });
 }
 
 // ******************************* AJOUT D'UN PROJET ************************************
@@ -458,9 +456,11 @@ const inputTitre = document.getElementById("titre");
 
 btnValidationAjout.addEventListener("change", (f) => {
   if (
-    imageDisplay.style.display === "block" &&
-    !inputTitre === "" &&
-    !formCategory === ""
+    (imageDisplay.style.display === "block" &&
+      !inputTitre === "" &&
+      optionCategorie === "Objets") ||
+    optionCategorie === "Appartements" ||
+    optionCategorie === "Hotels & restaurants"
   ) {
     btnValidationAjout.style.backgroundColor = "#1D6154";
   }

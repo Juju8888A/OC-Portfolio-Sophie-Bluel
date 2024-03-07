@@ -410,7 +410,7 @@ input[type="email"]{
 	width: 75px;
 	margin-bottom: 5px;
 }
-#trash {
+.trash-position {
 	position: absolute;
 	top: 4px;
 	right: 4px;
