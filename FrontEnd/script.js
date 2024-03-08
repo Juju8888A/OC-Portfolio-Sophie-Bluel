@@ -210,9 +210,15 @@ function projectsDisplayModif() {
   });
 }
 
+const btnAddPhoto = document.getElementById("btn-add-1");
+btnAddPhoto.addEventListener("click", (e) => {
+  e.preventDefault();
+  modalContentGallery.style.display = "none";
+  modalContentAddPhoto.style.display = null;
+});
+
 // Modale AddPhoto Display
 
-const btnAddPhoto = document.getElementById("btn-add-1");
 const btnBackGallery = document.querySelector(".js-modal-back");
 
 modalContentAddPhoto.innerHTML = `
@@ -224,39 +230,61 @@ modalContentAddPhoto.innerHTML = `
 </div>
 <h4 id=titlemodal2>Ajout photo</h4>
 <div class=form-container>
-<form class=form-ajout-photo action="#" method="post">
-<div class=file-container>
-<div id=form-result-image class=display-photo></div>
-<div id=form-add-photo class=ajouter-photo>
-      <div class="image-form"><i class="fa-solid fa-image"></i></div>
-      <label for="fichier" class="btn-file">+ Ajouter photo</label>
-      <input type="file" name="fichier" id="fichier" accept="image/*" style="display:none;">
-      <p>jpg, png : 4mo max</p></div>
-      </div>
-    <div class="text-form-container">
-      <label for="titre">Titre</label>
-      <input type="text" name="titre" id="titre" class="style-form">
-    </div>
-    <div class="text-form-container">
-      <label for="choix-category">Catégorie</label>
-        <select name="category-form" id="choix-category" class="style-form">
-        <option>Sélectionnez une catégorie</option>
-          
-        </select>
-    </div>
-    <div class=barre2><hr id=b-color></div>
-      <input type="submit" id="btn-valid" value="Valider" class="btn-ajout-photo"></form>
-    </div>
 
-</form>
 </div>
   `;
 
+// ************************************ FORMULAIRE *****************************************
+
+const containerForm = document.querySelector(".form-container");
+const formProjects = document.createElement("form");
+formProjects.id = "formAddProject";
+formProjects.classList.add("form-ajout-photo");
+formProjects.setAttribute("action", "#");
+formProjects.setAttribute("method", "post");
+containerForm.appendChild(formProjects);
+
+formProjects.addEventListener("submit", function (e) {
+  e.preventDefault();
+  addProjects();
+});
+
+// Partie ajout du fichier photo
+const fileContainer = document.createElement("div");
+const imageDisplay = document.createElement("div");
+const formDisplay = document.createElement("div");
+const imageForm = document.createElement("div");
+const iForm = document.createElement("i");
+const labelForm = document.createElement("label");
+const btnUploadImage = document.createElement("input");
+const paragrapheForm = document.createElement("p");
+fileContainer.classList.add("file-container");
+imageDisplay.classList.add("display-photo");
+formDisplay.classList.add("ajouter-photo");
+imageForm.classList.add("image-form");
+iForm.classList.add("fa-solid", "fa-image");
+labelForm.classList.add("btn-file");
+labelForm.setAttribute("for", "fichier");
+labelForm.textContent = "+ Ajouter photo";
+imageDisplay.id = "form-result-image";
+formDisplay.id = "form-add-photo";
+btnUploadImage.id = "fichier";
+btnUploadImage.setAttribute("type", "file");
+btnUploadImage.setAttribute("name", "fichier");
+btnUploadImage.setAttribute("accept", "image/*");
+btnUploadImage.setAttribute("style", "display:none;");
+paragrapheForm.textContent = "jpg, png : 4mo max";
+formProjects.appendChild(fileContainer);
+fileContainer.appendChild(imageDisplay);
+fileContainer.appendChild(formDisplay);
+formDisplay.appendChild(imageForm);
+imageForm.appendChild(iForm);
+formDisplay.appendChild(labelForm);
+formDisplay.appendChild(btnUploadImage);
+formDisplay.appendChild(paragrapheForm);
+
 // Upload image dynamique
 
-const btnUploadImage = document.getElementById("fichier");
-const imageDisplay = document.getElementById("form-result-image");
-const formDisplay = document.getElementById("form-add-photo");
 imageDisplay.style.display = "none";
 
 function loadedFile() {
@@ -278,6 +306,7 @@ function displayImage(event, file) {
   const figureElement = document.createElement("figure");
   figureElement.id = "image-selected";
   const imageElement = document.createElement("img");
+  imageElement.id = "image-add";
   imageElement.src = event.target.result;
 
   figureElement.appendChild(imageElement);
@@ -291,24 +320,65 @@ function displayImage(event, file) {
 
 btnUploadImage.addEventListener("change", loadedFile);
 
-// Formulaire dynamique
-const formCategory = document.getElementById("choix-category");
+// ajout de l'input Titre et Catégorie
 
-// Objets
+const inputContainerTitle = document.createElement("div");
+const inputContainerCategorie = document.createElement("div");
+const labelTitle = document.createElement("label");
+const labelCategorie = document.createElement("label");
+const inputCategorie = document.createElement("select");
+const optionCategorieBase = document.createElement("option");
+const inputTitleTitre = document.createElement("input");
+inputContainerTitle.classList.add("text-form-container");
+inputContainerCategorie.classList.add("text-form-container");
+inputTitleTitre.classList.add("style-form");
+inputTitleTitre.id = "titre";
+inputTitleTitre.setAttribute("type", "text");
+inputTitleTitre.setAttribute("name", "titre");
+labelTitle.setAttribute("for", "titre");
+labelCategorie.setAttribute("for", "choix-category");
+labelTitle.textContent = "Titre";
+labelCategorie.textContent = "Catégorie";
+inputCategorie.id = "choix-category";
+inputCategorie.setAttribute("name", "category-form");
+inputCategorie.classList.add("style-form");
+optionCategorieBase.textContent = "Veuillez sélectionner une catégorie";
+formProjects.appendChild(inputContainerTitle);
+formProjects.appendChild(inputContainerCategorie);
+inputContainerTitle.appendChild(labelTitle);
+inputContainerCategorie.appendChild(labelCategorie);
+inputContainerCategorie.appendChild(inputCategorie);
+inputCategorie.appendChild(optionCategorieBase);
+inputContainerTitle.appendChild(inputTitleTitre);
+
+// option du formulaire dynamique, récupération des données category
+
 function chooseCategory() {
   category.forEach((category) => {
     const optionCategorie = document.createElement("option");
     optionCategorie.setAttribute("value", category.name);
     optionCategorie.innerText = category.name;
-    formCategory.appendChild(optionCategorie);
+    inputCategorie.appendChild(optionCategorie);
   });
 }
 
-btnAddPhoto.addEventListener("click", (e) => {
-  e.preventDefault();
-  modalContentGallery.style.display = "none";
-  modalContentAddPhoto.style.display = null;
-});
+// barre de séparation
+
+const barreDiv2 = document.createElement("div");
+barreDiv2.classList.add = "barre2";
+const barreHr = document.createElement("hr");
+barreHr.id = "b-color";
+formProjects.appendChild(barreDiv2);
+barreDiv2.appendChild(barreHr);
+
+// bouton de validation du formulaire
+
+const btnValidationAjout = document.createElement("input");
+btnValidationAjout.id = "btn-valid";
+btnValidationAjout.setAttribute("type", "submit");
+btnValidationAjout.setAttribute("value", "Valider");
+btnValidationAjout.classList.add("btn-ajout-photo");
+formProjects.appendChild(btnValidationAjout);
 
 // **************************** OUVERTURE DE LA MODALE *********************************
 
@@ -451,52 +521,49 @@ function deleteProject(event) {
 }
 
 // ******************************* AJOUT D'UN PROJET ************************************
-const btnValidationAjout = document.getElementById("btn-valid");
-const inputTitre = document.getElementById("titre");
 
 btnValidationAjout.addEventListener("change", (f) => {
-  if (
-    (imageDisplay.style.display === "block" &&
-      !inputTitre === "" &&
-      optionCategorie === "Objets") ||
-    optionCategorie === "Appartements" ||
-    optionCategorie === "Hotels & restaurants"
-  ) {
+  if ((!imgUrl === "") & (!titleImg === "") & (!categoryImg === "")) {
     btnValidationAjout.style.backgroundColor = "#1D6154";
   }
 });
 
-btnValidationAjout.addEventListener("click", AddProjects);
+function addProjects() {
+  let imgUrl = document.querySelector("#image-selected img").src;
+  let titleImg = document.querySelector("#titre").value;
+  let categoryImg = document.querySelector("#choix-category option").value;
 
-function AddProjects() {
-  projectsModified.forEach((project) => {
-    let dataProjects = {
-      image: project.imageUrl,
-      title: project.title,
-      category: project.category.name,
-    };
+  let dataAddProject = {
+    image: imgUrl,
+    title: titleImg,
+    category: categoryImg,
+  };
 
-    let urlAdd = `http://localhost:5678/api/works/${dataProjects}`;
+  let urlAdd = `http://localhost:5678/api/works`;
 
-    let fetchAdd = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${dataUser.token}`,
-      },
-      body: JSON.stringify(dataProjects),
-    };
+  let fetchAdd = {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(dataAddProject),
+  };
 
-    fetch(urlAdd, fetchAdd)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Echec de l'ajout");
-        } else {
-          console.log("Projet ajouté avec succès");
-        }
-      })
-      .catch((error) => {
-        console.log("Echec de l'ajout", error);
-      });
-  });
+  fetch(urlAdd, fetchAdd)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Echec de l'ajout");
+      }
+      return response.json();
+    })
+    .then((dataAddProject) => {
+      console.log(dataAddProject);
+      projectsDisplayModif();
+      projectsDisplay();
+    })
+    .catch((error) => {
+      console.log("Echec de l'ajout", error);
+    });
 }
