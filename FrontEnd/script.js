@@ -384,14 +384,18 @@ btnValidationAjout.setAttribute("value", "Valider");
 btnValidationAjout.classList.add("btn-ajout-photo");
 formProjects.appendChild(btnValidationAjout);
 
-// si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation d
-btnValidationAjout.addEventListener("change", (f) => {
+// si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation devient vert avant la soumission du formulaire
+formProjects.addEventListener("change", (f) => {
   if (
     imageDisplay.style.display === "block" &&
     inputTitleTitre.value !== "" &&
-    optionCategorie.value !== "Veuillez sélectionner une catégorie"
+    inputCategorie.value !== ""
   ) {
     btnValidationAjout.style.backgroundColor = "#1D6154";
+    btnValidationAjout.style.borderColor = "#1D6154";
+  } else {
+    btnValidationAjout.style.backgroundColor = "#A7A7A7";
+    btnValidationAjout.style.borderColor = "#A7A7A7";
   }
 });
 formProjects.addEventListener("submit", function (e) {
