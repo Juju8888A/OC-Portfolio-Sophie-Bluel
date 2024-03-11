@@ -12,7 +12,7 @@ let errorLogin = document.getElementById("error_comment");
 
 // pour vérifier l'email je vérifie son contenu, que c'est bien une adressse mail avec regExp
 const mailValid = function (inputEmail) {
-  let emailRegExp = new RegExp(`^[a-z._-]+@[a-z._-]+\\.[a-z._-]+$`);
+  let emailRegExp = new RegExp(`^[a-zA-Z0-9._-]+@[a-z._-]+\\.[a-z._-]+$`);
   // je teste le regExp
   let testEmail = emailRegExp.test(inputEmail.value);
   console.log(testEmail);
@@ -22,6 +22,7 @@ const mailValid = function (inputEmail) {
     // mailMsg.innerHTML = "Adresse Valide";
     // mailMsg.style.color = "green";
     // je renvoie true pour dire que c'est correct
+    mailMsg.innerHTML = "";
     return true;
   } else {
     mailMsg.innerHTML = "Veuillez entrer un e-mail valide";
@@ -59,6 +60,7 @@ const mdpValid = function (inputPassword) {
   if (valid) {
     // mdpMsg.innerHTML = "Mot de passe valide";
     // mdpMsg.style.color = "green";
+    mdpMsg.innerHTML = "";
     return true;
   } else {
     mdpMsg.innerHTML = "Veuillez entrer un mot de passe valide";

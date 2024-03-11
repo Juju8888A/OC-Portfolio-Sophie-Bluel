@@ -244,11 +244,6 @@ formProjects.setAttribute("action", "#");
 formProjects.setAttribute("method", "post");
 containerForm.appendChild(formProjects);
 
-formProjects.addEventListener("submit", function (e) {
-  e.preventDefault();
-  addProjects();
-});
-
 // Partie ajout du fichier photo
 const fileContainer = document.createElement("div");
 const imageDisplay = document.createElement("div");
@@ -273,6 +268,7 @@ btnUploadImage.setAttribute("type", "file");
 btnUploadImage.setAttribute("name", "fichier");
 btnUploadImage.setAttribute("accept", "image/*");
 btnUploadImage.setAttribute("style", "display:none;");
+btnUploadImage.required = true;
 paragrapheForm.textContent = "jpg, png : 4mo max";
 formProjects.appendChild(fileContainer);
 fileContainer.appendChild(imageDisplay);
@@ -288,25 +284,28 @@ formDisplay.appendChild(paragrapheForm);
 imageDisplay.style.display = "none";
 
 function loadedFile() {
-  const fileRegExp = /\.(jpe?g|png|gif)$/i;
+  const fileRegExp = /\.(jpe?g|png)$/i;
   if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
-    return;
+    spanForm.style.color = "red";
+    spanForm.textContent = "Erreur, veuillez charger une image";
+    console.log("Ce fichier n'est pas accepté");
+  } else {
+    const image = this.files[0];
+    const imageReader = new FileReader();
+    imageReader.readAsDataURL(image);
+    imageReader.addEventListener("load", (event) => {
+      displayImage(event, image);
+    });
+    spanForm.textContent = "";
+    console.log("Ce fichier est accepté");
   }
-  console.log("Ce fichier est accepté");
-
-  const image = this.files[0];
-  const imageReader = new FileReader();
-  imageReader.readAsDataURL(image);
-  imageReader.addEventListener("load", (event) => {
-    displayImage(event, image);
-  });
 }
 
 function displayImage(event, file) {
   const figureElement = document.createElement("figure");
   figureElement.id = "image-selected";
   const imageElement = document.createElement("img");
-  imageElement.id = "image-add";
+  imageElement.id = "image-added";
   imageElement.src = event.target.result;
 
   figureElement.appendChild(imageElement);
@@ -329,12 +328,14 @@ const labelCategorie = document.createElement("label");
 const inputCategorie = document.createElement("select");
 const optionCategorieBase = document.createElement("option");
 const inputTitleTitre = document.createElement("input");
+const spanForm = document.createElement("span");
 inputContainerTitle.classList.add("text-form-container");
 inputContainerCategorie.classList.add("text-form-container");
 inputTitleTitre.classList.add("style-form");
 inputTitleTitre.id = "titre";
 inputTitleTitre.setAttribute("type", "text");
 inputTitleTitre.setAttribute("name", "titre");
+inputTitleTitre.required = true;
 labelTitle.setAttribute("for", "titre");
 labelCategorie.setAttribute("for", "choix-category");
 labelTitle.textContent = "Titre";
@@ -342,7 +343,9 @@ labelCategorie.textContent = "Catégorie";
 inputCategorie.id = "choix-category";
 inputCategorie.setAttribute("name", "category-form");
 inputCategorie.classList.add("style-form");
-optionCategorieBase.textContent = "Veuillez sélectionner une catégorie";
+inputCategorie.required = true;
+optionCategorieBase.textContent = "";
+spanForm.id = "error-form";
 formProjects.appendChild(inputContainerTitle);
 formProjects.appendChild(inputContainerCategorie);
 inputContainerTitle.appendChild(labelTitle);
@@ -350,6 +353,7 @@ inputContainerCategorie.appendChild(labelCategorie);
 inputContainerCategorie.appendChild(inputCategorie);
 inputCategorie.appendChild(optionCategorieBase);
 inputContainerTitle.appendChild(inputTitleTitre);
+formDisplay.appendChild(spanForm);
 
 // option du formulaire dynamique, récupération des données category
 
@@ -379,6 +383,21 @@ btnValidationAjout.setAttribute("type", "submit");
 btnValidationAjout.setAttribute("value", "Valider");
 btnValidationAjout.classList.add("btn-ajout-photo");
 formProjects.appendChild(btnValidationAjout);
+
+// si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation d
+btnValidationAjout.addEventListener("change", (f) => {
+  if (
+    imageDisplay.style.display === "block" &&
+    inputTitleTitre.value !== "" &&
+    optionCategorie.value !== "Veuillez sélectionner une catégorie"
+  ) {
+    btnValidationAjout.style.backgroundColor = "#1D6154";
+  }
+});
+formProjects.addEventListener("submit", function (e) {
+  e.preventDefault();
+  addProjects();
+});
 
 // **************************** OUVERTURE DE LA MODALE *********************************
 
@@ -506,7 +525,7 @@ function deleteProject(event) {
 
         // dans mon tableau, je souhaite filtrer, conserver uniquement les éléments dont l'ID est différent de deleteId
         projects = projects.filter((e) => {
-          console.log(e.id, parseInt(deleteId));
+          // console.log(e.id, parseInt(deleteId));
           return e.id !== parseInt(deleteId);
         });
         console.log(projects);
@@ -522,19 +541,16 @@ function deleteProject(event) {
 
 // ******************************* AJOUT D'UN PROJET ************************************
 
-btnValidationAjout.addEventListener("change", (f) => {
-  if ((!imgUrl === "") & (!titleImg === "") & (!categoryImg === "")) {
-    btnValidationAjout.style.backgroundColor = "#1D6154";
-  }
-});
-
 function addProjects() {
-  let imgUrl = document.querySelector("#image-selected img").src;
-  let titleImg = document.querySelector("#titre").value;
-  let categoryImg = document.querySelector("#choix-category option").value;
+  let imgId = document.querySelector("#image-selected img").id;
+  let titleImg = document.getElementById("titre").value;
+  let categoryImg = document.getElementById("choix-category").value;
+  console.log(imgId);
+  console.log(titleImg);
+  console.log(categoryImg);
 
   let dataAddProject = {
-    image: imgUrl,
+    image: imgId,
     title: titleImg,
     category: categoryImg,
   };
@@ -545,7 +561,7 @@ function addProjects() {
     method: "POST",
     headers: {
       accept: "application/json",
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(dataAddProject),
@@ -553,13 +569,27 @@ function addProjects() {
 
   fetch(urlAdd, fetchAdd)
     .then((response) => {
+      console.log("Server response: ", response);
       if (!response.ok) {
         throw new Error("Echec de l'ajout");
       }
       return response.json();
     })
-    .then((dataAddProject) => {
-      console.log(dataAddProject);
+    .then((dataProjects) => {
+      console.log(dataProjects);
+      dataProjects.forEach((dataProjects) => {
+        const figureElement = document.createElement("figure");
+        let imageElement = document.createElement("img");
+        let captionElement = document.createElement("figcaption");
+        figureElement.classList.add("project-card");
+        figureElement.id = dataProjects.id;
+        imageElement.src = dataProjects.imageUrl;
+        imageElement.alt = "image de " + dataProjects.titleImg;
+        captionElement.textContent = dataProjects.titleImg;
+        projectsContainer.appendChild(figureElement);
+        figureElement.appendChild(imageElement);
+        figureElement.appendChild(captionElement);
+      });
       projectsDisplayModif();
       projectsDisplay();
     })

@@ -467,8 +467,7 @@ input[type="email"]{
 	height: 180px;
 	display: flex;
 	justify-content: center;
-	
-	margin-bottom: 30px;
+	margin-bottom: 25px;
 }
 .display-photo{
 	width: 135px;
