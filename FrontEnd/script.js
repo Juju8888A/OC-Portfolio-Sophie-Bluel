@@ -360,7 +360,7 @@ formDisplay.appendChild(spanForm);
 function chooseCategory() {
   category.forEach((category) => {
     const optionCategorie = document.createElement("option");
-    optionCategorie.setAttribute("value", category.name);
+    optionCategorie.setAttribute("value", category.id);
     optionCategorie.innerText = category.name;
     inputCategorie.appendChild(optionCategorie);
   });
@@ -400,7 +400,8 @@ formProjects.addEventListener("change", (f) => {
 });
 formProjects.addEventListener("submit", function (e) {
   e.preventDefault();
-  addProjects();
+  console.log(e);
+  addProjects(e);
 });
 
 // **************************** OUVERTURE DE LA MODALE *********************************
@@ -502,6 +503,7 @@ function deleteProject(event) {
   const deleteId = elementId.split("-")[1];
   // je stocke mon id dans une variable
   // je sépare mon id trash d'un "-" pour récupérer ensuite que le numéro de la poubelle (index)
+  console.log(deleteId);
 
   // je crée donc la requete DELETE avec les informations suivantes
   let data = {
@@ -545,19 +547,19 @@ function deleteProject(event) {
 
 // ******************************* AJOUT D'UN PROJET ************************************
 
-function addProjects() {
-  let imgId = document.querySelector("#image-selected img").id;
-  let titleImg = document.getElementById("titre").value;
-  let categoryImg = document.getElementById("choix-category").value;
-  console.log(imgId);
+function addProjects(event) {
+  const imgContent = event.target[0].files[0];
+  const titleImg = event.target[1].value;
+  const categoryImg = event.target[2].value;
+  console.log(imgContent);
   console.log(titleImg);
   console.log(categoryImg);
 
-  let dataAddProject = {
-    image: imgId,
-    title: titleImg,
-    category: categoryImg,
-  };
+  const formData = new FormData();
+  formData.append("image", imgContent);
+  formData.append("title", titleImg);
+  formData.append("category", categoryImg);
+  console.log(formData);
 
   let urlAdd = `http://localhost:5678/api/works`;
 
@@ -568,7 +570,7 @@ function addProjects() {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    body: JSON.stringify(dataAddProject),
+    body: formData,
   };
 
   fetch(urlAdd, fetchAdd)
@@ -601,3 +603,26 @@ function addProjects() {
       console.log("Echec de l'ajout", error);
     });
 }
+
+// console.log(imgFile);
+// let imgFile = document.querySelector("#image-selected img");
+// let newReader = new FileReader();
+// newReader.onloadend = () => {
+//   let imgContent = newReader.result;
+//   let titleImg = document.getElementById("titre").value;
+//   let categoryImg = document.getElementById("choix-category").value;
+// let dataAddProject = {
+//   image: formDataFile,
+//   title: formDataTitle,
+//   category: formDataCategorie,
+// };
+
+// newReader.readAsDataURL(imgFile);
+
+// console.log(imgId);
+// console.log(titleImg);
+// console.log(categoryImg);
+
+// const formDataFile = new FormData(event.target[0].files[0]);
+// const formDataTitle = new FormData(event.target[1].value);
+// const formDataCategorie = new FormData(event.target[2].value);
