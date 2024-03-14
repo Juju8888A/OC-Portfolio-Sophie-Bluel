@@ -242,27 +242,29 @@ formProjects.id = "formAddProject";
 formProjects.classList.add("form-ajout-photo");
 formProjects.setAttribute("action", "#");
 formProjects.setAttribute("method", "post");
-containerForm.appendChild(formProjects);
+// containerForm.appendChild(formProjects);
 
 // Partie ajout du fichier photo
 const fileContainer = document.createElement("div");
-const imageDisplay = document.createElement("div");
-const formDisplay = document.createElement("div");
-const imageForm = document.createElement("div");
+// const imageDisplay = document.createElement("div");
+// const formDisplay = document.createElement("div");
+// const imageForm = document.createElement("div");
 const iForm = document.createElement("i");
 const labelForm = document.createElement("label");
 const btnUploadImage = document.createElement("input");
 const paragrapheForm = document.createElement("p");
 fileContainer.classList.add("file-container");
-imageDisplay.classList.add("display-photo");
-formDisplay.classList.add("ajouter-photo");
-imageForm.classList.add("image-form");
-iForm.classList.add("fa-solid", "fa-image");
+// imageDisplay.classList.add("display-photo");
+// formDisplay.classList.add("ajouter-photo");
+// imageForm.classList.add("image-form");
+iForm.classList.add("fa-regular", "fa-image", "display-i");
+iForm.setAttribute("style", "display:block;");
 labelForm.classList.add("btn-file");
 labelForm.setAttribute("for", "fichier");
+labelForm.setAttribute("style", "display:block;");
 labelForm.textContent = "+ Ajouter photo";
-imageDisplay.id = "form-result-image";
-formDisplay.id = "form-add-photo";
+// imageDisplay.id = "form-result-image";
+// formDisplay.id = "form-add-photo";
 btnUploadImage.id = "fichier";
 btnUploadImage.setAttribute("type", "file");
 btnUploadImage.setAttribute("name", "fichier");
@@ -270,18 +272,21 @@ btnUploadImage.setAttribute("accept", "image/*");
 btnUploadImage.setAttribute("style", "display:none;");
 btnUploadImage.required = true;
 paragrapheForm.textContent = "jpg, png : 4mo max";
+paragrapheForm.setAttribute("style", "display:block;");
 formProjects.appendChild(fileContainer);
-fileContainer.appendChild(imageDisplay);
-fileContainer.appendChild(formDisplay);
-formDisplay.appendChild(imageForm);
-imageForm.appendChild(iForm);
-formDisplay.appendChild(labelForm);
-formDisplay.appendChild(btnUploadImage);
-formDisplay.appendChild(paragrapheForm);
+// fileContainer.appendChild(imageDisplay);
+// fileContainer.appendChild(formDisplay);
+// formDisplay.appendChild(imageForm);
+containerForm.appendChild(formProjects);
+formProjects.appendChild(fileContainer);
+fileContainer.appendChild(iForm);
+fileContainer.appendChild(labelForm);
+fileContainer.appendChild(btnUploadImage);
+fileContainer.appendChild(paragrapheForm);
 
 // Upload image dynamique
 
-imageDisplay.style.display = "none";
+// imageDisplay.style.display = "none";
 
 function loadedFile() {
   const fileRegExp = /\.(jpe?g|png)$/i;
@@ -302,35 +307,33 @@ function loadedFile() {
 }
 
 function displayImage(event, file) {
-  const figureElement = document.createElement("figure");
-  figureElement.id = "image-selected";
   const imageElement = document.createElement("img");
   imageElement.id = "image-added";
   imageElement.src = event.target.result;
+  imageElement.setAttribute("style", "display:block");
+  // imageDisplay.appendChild(figureElement);
+  fileContainer.appendChild(imageElement);
 
-  figureElement.appendChild(imageElement);
-  imageDisplay.appendChild(figureElement);
-  imageDisplay.style.display = "block";
-
-  if (imageDisplay.style.display === "block") {
-    formDisplay.style.display = "none";
+  if ((imageElement.style.display = "block")) {
+    iForm.setAttribute("style", "display:none;");
+    labelForm.setAttribute("style", "display:none;");
+    paragrapheForm.setAttribute("style", "display:none;");
   }
 }
-
 btnUploadImage.addEventListener("change", loadedFile);
 
 // ajout de l'input Titre et Catégorie
 
-const inputContainerTitle = document.createElement("div");
-const inputContainerCategorie = document.createElement("div");
+// const inputContainerTitle = document.createElement("div");
+// const inputContainerCategorie = document.createElement("div");
 const labelTitle = document.createElement("label");
 const labelCategorie = document.createElement("label");
 const inputCategorie = document.createElement("select");
 const optionCategorieBase = document.createElement("option");
 const inputTitleTitre = document.createElement("input");
 const spanForm = document.createElement("span");
-inputContainerTitle.classList.add("text-form-container");
-inputContainerCategorie.classList.add("text-form-container");
+// inputContainerTitle.classList.add("text-form-container");
+// inputContainerCategorie.classList.add("text-form-container");
 inputTitleTitre.classList.add("style-form");
 inputTitleTitre.id = "titre";
 inputTitleTitre.setAttribute("type", "text");
@@ -346,18 +349,20 @@ inputCategorie.classList.add("style-form");
 inputCategorie.required = true;
 optionCategorieBase.textContent = "";
 spanForm.id = "error-form";
-formProjects.appendChild(inputContainerTitle);
-formProjects.appendChild(inputContainerCategorie);
-inputContainerTitle.appendChild(labelTitle);
-inputContainerCategorie.appendChild(labelCategorie);
-inputContainerCategorie.appendChild(inputCategorie);
+// formProjects.appendChild(inputContainerTitle);
+// formProjects.appendChild(inputContainerCategorie);
+formProjects.appendChild(labelTitle);
+formProjects.appendChild(inputTitleTitre);
+formProjects.appendChild(labelCategorie);
+formProjects.appendChild(inputCategorie);
 inputCategorie.appendChild(optionCategorieBase);
-inputContainerTitle.appendChild(inputTitleTitre);
-formDisplay.appendChild(spanForm);
+formProjects.appendChild(spanForm);
 
 // option du formulaire dynamique, récupération des données category
 
 function chooseCategory() {
+  console.log("categories: ", category);
+
   category.forEach((category) => {
     const optionCategorie = document.createElement("option");
     optionCategorie.setAttribute("value", category.id);
@@ -387,9 +392,8 @@ formProjects.appendChild(btnValidationAjout);
 // si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation devient vert avant la soumission du formulaire
 formProjects.addEventListener("change", (f) => {
   if (
-    imageDisplay.style.display === "block" &&
-    inputTitleTitre.value !== "" &&
-    inputCategorie.value !== ""
+    (btnUploadImage.style.display =
+      "none" && inputTitleTitre.value !== "" && inputCategorie.value !== "")
   ) {
     btnValidationAjout.style.backgroundColor = "#1D6154";
     btnValidationAjout.style.borderColor = "#1D6154";
@@ -397,11 +401,6 @@ formProjects.addEventListener("change", (f) => {
     btnValidationAjout.style.backgroundColor = "#A7A7A7";
     btnValidationAjout.style.borderColor = "#A7A7A7";
   }
-});
-formProjects.addEventListener("submit", function (e) {
-  e.preventDefault();
-  console.log(e);
-  addProjects(e);
 });
 
 // **************************** OUVERTURE DE LA MODALE *********************************
@@ -547,19 +546,25 @@ function deleteProject(event) {
 
 // ******************************* AJOUT D'UN PROJET ************************************
 
-function addProjects(event) {
-  const imgContent = event.target[0].files[0];
-  const titleImg = event.target[1].value;
-  const categoryImg = event.target[2].value;
+formProjects.addEventListener("submit", function (e) {
+  e.preventDefault();
+  console.log(e);
+  addProjects();
+});
+
+function addProjects() {
+  const formData = new FormData(formProjects);
+
+  const imgContent = document.getElementById("fichier").files[0];
+  const titleImg = document.getElementById("titre").value;
+  const categoryImg = document.getElementById("choix-category").value;
   console.log(imgContent);
   console.log(titleImg);
   console.log(categoryImg);
 
-  const formData = new FormData();
   formData.append("image", imgContent);
   formData.append("title", titleImg);
   formData.append("category", categoryImg);
-  console.log(formData);
 
   let urlAdd = `http://localhost:5678/api/works`;
 
@@ -567,7 +572,6 @@ function addProjects(event) {
     method: "POST",
     headers: {
       accept: "application/json",
-      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: formData,
@@ -603,6 +607,25 @@ function addProjects(event) {
       console.log("Echec de l'ajout", error);
     });
 }
+
+//  "boundary=---",
+// const imgContent = document.getElementById("fichier");
+// const imgContent = document.querySelector("#image-selected img").id;
+// const imgContent = document.querySelector("#image-selected img").src;
+
+// const imgContent = event.target[0].files[0];
+// const titleImg = event.target[1].value;
+// const categoryImg = event.target[2].value;
+// console.log(imgContent);
+// console.log(titleImg);
+// console.log(categoryImg);
+
+// const formData = new FormData();
+// formData.append("image", imgContent);
+// formData.append("title", titleImg);
+// formData.append("category", categoryImg);
+// console.log(formData);
+// const formP = document.getElementById("formAddProject");
 
 // console.log(imgFile);
 // let imgFile = document.querySelector("#image-selected img");
