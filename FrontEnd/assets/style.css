@@ -114,8 +114,8 @@ li:hover {
 #introduction {
 	display: flex;
 	align-items: center;
-	padding-left: 60px;
-	padding-right: 60px;
+	padding-left: 100px;
+	padding-right: 100px;
 	gap: 80px;
 }
 #introduction figure {
@@ -136,8 +136,8 @@ li:hover {
 	margin-bottom: 15px;
 }
 #portfolio{
-	padding-left: 60px;
-	padding-right: 60px;
+	padding-left: 100px;
+	padding-right: 100px;
 }
 #portfolio h2 {
 	text-align: center;
@@ -172,13 +172,19 @@ li:hover {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
+	grid-row-gap: 15px;
 	grid-column-gap: 20px;
-	grid-row-gap: 20px;
 }
-
-.gallery img {
+.project-card{
 	width: 100%;
-
+	align-items: center;
+}
+.gallery img {
+	width: 304px;
+	height: 407px;
+}
+figcaption{
+	font-size: 13px;
 }
 #contact {
 	width: 35%;

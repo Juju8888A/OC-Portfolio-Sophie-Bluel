@@ -241,7 +241,7 @@ const formProjects = document.createElement("form");
 formProjects.id = "formAddProject";
 formProjects.classList.add("form-ajout-photo");
 formProjects.setAttribute("action", "#");
-formProjects.setAttribute("method", "post");
+formProjects.setAttribute("method", "POST");
 // containerForm.appendChild(formProjects);
 
 // Partie ajout du fichier photo
@@ -309,6 +309,7 @@ function loadedFile() {
 function displayImage(event, file) {
   const imageElement = document.createElement("img");
   imageElement.id = "image-added";
+  imageElement.alt = "Nouveau projet";
   imageElement.src = event.target.result;
   imageElement.setAttribute("style", "display:block");
   // imageDisplay.appendChild(figureElement);
@@ -515,7 +516,8 @@ function deleteProject(event) {
   let fetchDelete = {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
+      accept: "*/*",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
@@ -553,25 +555,28 @@ formProjects.addEventListener("submit", function (e) {
 });
 
 function addProjects() {
-  const formData = new FormData(formProjects);
+  const formData = new FormData();
+  const imgContent = document.getElementById("fichier");
+  const titleImg = document.getElementById("titre");
+  const categoryImg = document.getElementById("choix-category");
 
-  const imgContent = document.getElementById("fichier").files[0];
-  const titleImg = document.getElementById("titre").value;
-  const categoryImg = document.getElementById("choix-category").value;
   console.log(imgContent);
   console.log(titleImg);
   console.log(categoryImg);
 
-  formData.append("image", imgContent);
-  formData.append("title", titleImg);
-  formData.append("category", categoryImg);
+  formData.append("image", imgContent.files[0], "restaurant-mj-ny.png");
+  formData.append("title", titleImg.value);
+  formData.append("category", categoryImg.value);
+  for (const item of formData) {
+    console.log(item);
+  }
 
   let urlAdd = `http://localhost:5678/api/works`;
 
   let fetchAdd = {
     method: "POST",
     headers: {
-      accept: "application/json",
+      accept: "multipart/form-data",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: formData,
@@ -580,72 +585,14 @@ function addProjects() {
   fetch(urlAdd, fetchAdd)
     .then((response) => {
       console.log("Server response: ", response);
-      if (!response.ok) {
-        throw new Error("Echec de l'ajout");
+      if (response.ok) {
+        console.log("Projet ajouté avec succès");
+        return response.json();
+      } else {
+        console.log("Projet non envoyé");
       }
-      return response.json();
-    })
-    .then((dataProjects) => {
-      console.log(dataProjects);
-      dataProjects.forEach((dataProjects) => {
-        const figureElement = document.createElement("figure");
-        let imageElement = document.createElement("img");
-        let captionElement = document.createElement("figcaption");
-        figureElement.classList.add("project-card");
-        figureElement.id = dataProjects.id;
-        imageElement.src = dataProjects.imageUrl;
-        imageElement.alt = "image de " + dataProjects.titleImg;
-        captionElement.textContent = dataProjects.titleImg;
-        projectsContainer.appendChild(figureElement);
-        figureElement.appendChild(imageElement);
-        figureElement.appendChild(captionElement);
-      });
-      projectsDisplayModif();
-      projectsDisplay();
     })
     .catch((error) => {
       console.log("Echec de l'ajout", error);
     });
 }
-
-//  "boundary=---",
-// const imgContent = document.getElementById("fichier");
-// const imgContent = document.querySelector("#image-selected img").id;
-// const imgContent = document.querySelector("#image-selected img").src;
-
-// const imgContent = event.target[0].files[0];
-// const titleImg = event.target[1].value;
-// const categoryImg = event.target[2].value;
-// console.log(imgContent);
-// console.log(titleImg);
-// console.log(categoryImg);
-
-// const formData = new FormData();
-// formData.append("image", imgContent);
-// formData.append("title", titleImg);
-// formData.append("category", categoryImg);
-// console.log(formData);
-// const formP = document.getElementById("formAddProject");
-
-// console.log(imgFile);
-// let imgFile = document.querySelector("#image-selected img");
-// let newReader = new FileReader();
-// newReader.onloadend = () => {
-//   let imgContent = newReader.result;
-//   let titleImg = document.getElementById("titre").value;
-//   let categoryImg = document.getElementById("choix-category").value;
-// let dataAddProject = {
-//   image: formDataFile,
-//   title: formDataTitle,
-//   category: formDataCategorie,
-// };
-
-// newReader.readAsDataURL(imgFile);
-
-// console.log(imgId);
-// console.log(titleImg);
-// console.log(categoryImg);
-
-// const formDataFile = new FormData(event.target[0].files[0]);
-// const formDataTitle = new FormData(event.target[1].value);
-// const formDataCategorie = new FormData(event.target[2].value);
