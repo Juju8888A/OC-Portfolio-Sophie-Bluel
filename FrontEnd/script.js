@@ -422,7 +422,7 @@ const openModal = function (e) {
 const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
-  // e.preventDefault();
+  e.preventDefault();
   window.setTimeout(function () {
     modal.style.display = "none";
     modal = null;
