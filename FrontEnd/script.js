@@ -242,41 +242,35 @@ formProjects.id = "formAddProject";
 formProjects.classList.add("form-ajout-photo");
 formProjects.setAttribute("action", "");
 formProjects.setAttribute("method", "POST");
-// containerForm.appendChild(formProjects);
 
 // Partie ajout du fichier photo
 const fileContainer = document.createElement("div");
-// const imageDisplay = document.createElement("div");
-// const formDisplay = document.createElement("div");
-// const imageForm = document.createElement("div");
+
 const iForm = document.createElement("i");
 const labelForm = document.createElement("label");
 const btnUploadImage = document.createElement("input");
+
 const paragrapheForm = document.createElement("p");
 fileContainer.classList.add("file-container");
-// imageDisplay.classList.add("display-photo");
-// formDisplay.classList.add("ajouter-photo");
-// imageForm.classList.add("image-form");
+
 iForm.classList.add("fa-regular", "fa-image", "display-i");
 iForm.setAttribute("style", "display:block;");
 labelForm.classList.add("btn-file");
 labelForm.setAttribute("for", "fichier");
 labelForm.setAttribute("style", "display:block;");
 labelForm.textContent = "+ Ajouter photo";
-// imageDisplay.id = "form-result-image";
-// formDisplay.id = "form-add-photo";
+
 btnUploadImage.id = "fichier";
 btnUploadImage.setAttribute("type", "file");
 btnUploadImage.setAttribute("name", "fichier");
 btnUploadImage.setAttribute("accept", "image/*");
 btnUploadImage.setAttribute("style", "display:none;");
 btnUploadImage.required = true;
+
 paragrapheForm.textContent = "jpg, png : 4mo max";
 paragrapheForm.setAttribute("style", "display:block;");
 formProjects.appendChild(fileContainer);
-// fileContainer.appendChild(imageDisplay);
-// fileContainer.appendChild(formDisplay);
-// formDisplay.appendChild(imageForm);
+
 containerForm.appendChild(formProjects);
 formProjects.appendChild(fileContainer);
 fileContainer.appendChild(iForm);
@@ -291,9 +285,10 @@ fileContainer.appendChild(paragrapheForm);
 function loadedFile() {
   const fileRegExp = /\.(jpe?g|png)$/i;
   if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
-    spanForm.style.color = "red";
-    spanForm.textContent = "Erreur, veuillez charger une image";
+    spanErrorImage.style.color = "red";
+    spanErrorImage.textContent = "Erreur, veuillez charger une image";
     console.log("Ce fichier n'est pas accepté");
+    console.log(spanErrorImage);
   } else {
     const image = this.files[0];
     const imageReader = new FileReader();
@@ -301,7 +296,7 @@ function loadedFile() {
     imageReader.addEventListener("load", (event) => {
       displayImage(event, image);
     });
-    spanForm.textContent = "";
+    spanErrorImage.textContent = "";
     console.log("Ce fichier est accepté");
   }
 }
@@ -325,16 +320,14 @@ btnUploadImage.addEventListener("change", loadedFile);
 
 // ajout de l'input Titre et Catégorie
 
-// const inputContainerTitle = document.createElement("div");
-// const inputContainerCategorie = document.createElement("div");
 const labelTitle = document.createElement("label");
 const labelCategorie = document.createElement("label");
 const inputCategorie = document.createElement("select");
 const optionCategorieBase = document.createElement("option");
 const inputTitleTitre = document.createElement("input");
-const spanForm = document.createElement("span");
-// inputContainerTitle.classList.add("text-form-container");
-// inputContainerCategorie.classList.add("text-form-container");
+// const spanForm = document.createElement("span");
+const spanErrorImage = document.createElement("span");
+
 inputTitleTitre.classList.add("style-form");
 inputTitleTitre.id = "titre";
 inputTitleTitre.setAttribute("type", "text");
@@ -349,15 +342,16 @@ inputCategorie.setAttribute("name", "category-form");
 inputCategorie.classList.add("style-form");
 inputCategorie.required = true;
 optionCategorieBase.textContent = "";
-spanForm.id = "error-form";
-// formProjects.appendChild(inputContainerTitle);
-// formProjects.appendChild(inputContainerCategorie);
+// spanForm.id = "error-form";
+spanErrorImage.id = "spanErrorImage";
+
 formProjects.appendChild(labelTitle);
 formProjects.appendChild(inputTitleTitre);
 formProjects.appendChild(labelCategorie);
 formProjects.appendChild(inputCategorie);
 inputCategorie.appendChild(optionCategorieBase);
-formProjects.appendChild(spanForm);
+// formProjects.appendChild(spanForm);
+formProjects.appendChild(spanErrorImage);
 
 // option du formulaire dynamique, récupération des données category
 
@@ -393,7 +387,6 @@ formProjects.appendChild(btnValidationAjout);
 // si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation devient vert avant la soumission du formulaire
 formProjects.addEventListener("change", () => {
   console.log("Change event");
-  const btnFile = document.getElementById(".btn-file");
   const imgContenu = document.getElementById("fichier");
 
   if (
@@ -403,9 +396,11 @@ formProjects.addEventListener("change", () => {
   ) {
     btnValidationAjout.classList.add("green");
     btnValidationAjout.classList.remove("grey");
+    spanForm.textContent = "";
   } else {
     btnValidationAjout.classList.add("grey");
     btnValidationAjout.classList.remove("green");
+    // spanForm.textContent = "Veuillez remplir tous les champs du formulaire";
   }
 });
 

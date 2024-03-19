@@ -236,7 +236,7 @@ footer {
 }
 
 .main-login{
-margin-bottom: 370px;
+margin-bottom: 388px;
 }
 
 footer nav ul {
@@ -289,6 +289,18 @@ footer nav ul {
 input[type="email"]{
 	margin-bottom: 10px;
 
+}
+#btn-envoi{
+	padding: 10px 40px;
+	border: 2px solid #1D6154;
+	border-radius: 25px;
+	font-family: 'Syne';
+	font-size: 0.9rem;
+	color: #FFFEF8;
+	background-color: #1D6154;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 #mdp-oublie {
@@ -490,18 +502,7 @@ input[type="email"]{
 	align-items: center;
 	gap: 8px;
 }
-.display-photo{
-	width: 135px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.display-photo figure {
-	display: flex;
-	justify-content: center;
-	height: 100%;
-	
-}
+
 .ajouter-photo{
 	padding: 20px;
 	display: flex;
@@ -520,7 +521,16 @@ input[type="email"]{
 	padding:  10px 30px;
 	border-radius: 20px;
 }
-
+#spanErrorImage{
+	height: 8px;
+	font-size: 0.8rem;
+	color: red;
+}
+#error-form {
+	height: 8px;
+	font-size: 0.7rem;
+	color: red;
+}
 #btn-valid{
 	margin: 0 auto;
 	width: 180px;
