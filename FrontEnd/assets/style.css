@@ -219,7 +219,7 @@ figcaption{
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+#btn-envoyer{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -433,6 +433,13 @@ input[type="email"]{
 	margin: 20px 0 30px 80px;
 	opacity: 0.4;
 }
+.btn-ajouter-photo{
+	display: flex;
+	justify-content: center;
+	padding: 8px 100px;
+	border: none;
+	border-radius: 25px;
+}
 #btn-add-1{
 	padding: 10px 40px;
 	border: 2px solid #1D6154;
@@ -449,7 +456,7 @@ input[type="email"]{
 .form-container{
 	padding-left: 80px;
 	padding-right: 80px;
-	height: 500px;
+	height: 480px;
 }
 .form-ajout-photo{
 	width: 100%;
@@ -470,7 +477,7 @@ input[type="email"]{
 }
 .style-form{
 	padding: 15px;
-	margin-bottom: 20px;
+
 	border: none;
 	filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.1));
 }
@@ -482,7 +489,6 @@ input[type="email"]{
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
-	margin-bottom: 25px;
 }
 .display-photo{
 	width: 135px;
@@ -515,20 +521,25 @@ input[type="email"]{
 	border-radius: 20px;
 }
 
-.btn-ajout-photo{
-	display: flex;
-	justify-content: center;
-	padding: 8px 100px;
-	border: none;
-	border-radius: 25px;
-}
 #btn-valid{
-	background-color: #A7A7A7;
-	border: 2px solid #A7A7A7;
-	border-radius: 25px;
+	margin: 0 auto;
+	width: 180px;
+	padding: 10px;
+	display: inline;
 	font-family: 'Syne';
 	font-size: 0.9rem;
 	color: #FFFEF8;
+	/* background-color: #A7A7A7;
+	border: 2px solid #A7A7A7; */
+	border-radius: 25px;
+}
+.grey{
+	background-color: #A7A7A7;
+	border: 2px solid #A7A7A7;
+}
+.green{
+	background-color: #1D6154;
+	border: 2px solid #1D6154;
 }
 #image-added{
 	height: 100%;

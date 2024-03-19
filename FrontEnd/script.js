@@ -184,7 +184,7 @@ modalContentGallery.innerHTML = `
 <div class=barre>
 <hr id=b-color>
 </div>
-<div class="btn-ajout-photo">
+<div class="btn-ajouter-photo">
 <button id="btn-add-1">Ajouter une photo</button>
 </div>
   `;
@@ -240,7 +240,7 @@ const containerForm = document.querySelector(".form-container");
 const formProjects = document.createElement("form");
 formProjects.id = "formAddProject";
 formProjects.classList.add("form-ajout-photo");
-formProjects.setAttribute("action", "#");
+formProjects.setAttribute("action", "");
 formProjects.setAttribute("method", "POST");
 // containerForm.appendChild(formProjects);
 
@@ -387,20 +387,25 @@ const btnValidationAjout = document.createElement("input");
 btnValidationAjout.id = "btn-valid";
 btnValidationAjout.setAttribute("type", "submit");
 btnValidationAjout.setAttribute("value", "Valider");
-btnValidationAjout.classList.add("btn-ajout-photo");
+btnValidationAjout.classList.add("grey");
 formProjects.appendChild(btnValidationAjout);
 
 // si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation devient vert avant la soumission du formulaire
-formProjects.addEventListener("change", (f) => {
+formProjects.addEventListener("change", () => {
+  console.log("Change event");
+  const btnFile = document.getElementById(".btn-file");
+  const imgContenu = document.getElementById("fichier");
+
   if (
-    (btnUploadImage.style.display =
-      "none" && inputTitleTitre.value !== "" && inputCategorie.value !== "")
+    imgContenu.files[0] &&
+    inputTitleTitre.value !== "" &&
+    inputCategorie.value !== ""
   ) {
-    btnValidationAjout.style.backgroundColor = "#1D6154";
-    btnValidationAjout.style.borderColor = "#1D6154";
+    btnValidationAjout.classList.add("green");
+    btnValidationAjout.classList.remove("grey");
   } else {
-    btnValidationAjout.style.backgroundColor = "#A7A7A7";
-    btnValidationAjout.style.borderColor = "#A7A7A7";
+    btnValidationAjout.classList.add("grey");
+    btnValidationAjout.classList.remove("green");
   }
 });
 
@@ -584,10 +589,12 @@ function addProjects() {
 
   fetch(urlAdd, fetchAdd)
     .then((response) => {
-      console.log("Server response: ", response);
       if (response.ok) {
+        console.log("Server response: ", response);
         console.log("Projet ajouté avec succès");
-        return response.json();
+        projectsDisplayModif();
+        projectsDisplay();
+        // return response.json();
       } else {
         console.log("Projet non envoyé");
       }
