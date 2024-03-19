@@ -8,7 +8,7 @@ let mailMsg = document.getElementById("mail_comment");
 let mdpMsg = document.getElementById("mdp_comment");
 let errorLogin = document.getElementById("error_comment");
 
-// **************************** E-MAIL*****************************************
+// ************************************************************** E-MAIL********************************************************************
 
 // pour vérifier l'email je vérifie son contenu, que c'est bien une adressse mail avec regExp
 const mailValid = function (inputEmail) {
@@ -32,7 +32,7 @@ const mailValid = function (inputEmail) {
   }
 };
 
-// **************************** MOT DE PASSE *****************************************
+// ********************************************************** MOT DE PASSE ****************************************************************
 
 const mdpValid = function (inputPassword) {
   // quelles sont les erreurs possibles de mot de passe? Je souhaite que le mot de passe ait au moins 1 minuscule, 1 majuscule et 1 chiffre et qu'il fasse minimum 3 caractères.
@@ -69,7 +69,7 @@ const mdpValid = function (inputPassword) {
   }
 };
 
-// ****************** EVENEMENTS **************************
+// *************************************************************** EVENEMENTS ************************************************************
 
 // au changement de valeurs dans l'input email, je souhaite que le mailValid s'active
 mail.addEventListener("change", function () {
@@ -91,7 +91,7 @@ myForm.addEventListener("submit", function (e) {
   }
 });
 
-// ************* API POST ***************
+// ************************************************************* REQUETE POST ***************************************************************
 
 // je crée une fonction
 function loginUser() {

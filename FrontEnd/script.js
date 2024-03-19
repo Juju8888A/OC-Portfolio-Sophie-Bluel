@@ -1,4 +1,3 @@
-// je crée une boite pour mettre à l'intérieur les données de l'API
 const projectsContainer = document.querySelector(".gallery");
 // récupération des boutons de la barre de filtres
 const buttonObjets = document.getElementById("btn-objets");
@@ -6,12 +5,11 @@ const buttonAppartements = document.getElementById("btn-appartements");
 const buttonHotelResto = document.getElementById("btn-hotel-resto");
 const buttonTous = document.getElementById("btn-tous");
 
-const myForm = document.getElementById("myForm");
-
+// je range les données reçues dans 2 tableaux
 let projects = [];
 let category = [];
 
-// je récupère les données de l'API avec un fetch
+// je récupère les données works de l'API avec un fetch
 async function fetchProjects() {
   await fetch("http://localhost:5678/api/works")
     .then((res) => res.json())
@@ -23,7 +21,7 @@ async function fetchProjects() {
     });
 }
 
-// je récupère également les données categorie
+// je récupère également les données category
 async function fetchCategory() {
   await fetch("http://localhost:5678/api/categories")
     .then((res) => res.json())
@@ -33,7 +31,7 @@ async function fetchCategory() {
 }
 
 // je crée les éléments figure qui contiendront les projets de l'architecte grâce aux données de l'API
-
+// je crée une première fonction d'affichage pour tous les projets
 function projectsDisplay() {
   projectsContainer.innerHTML = "";
   projects.forEach((project) => {
@@ -70,6 +68,7 @@ function projectsDisplayFiltered(filteredProjects) {
   });
 }
 
+// J'utilise FILTER pour filtrer les différentes catégories
 // Affichage objets
 
 function projectsDisplayObjets() {
@@ -97,20 +96,17 @@ function projectsDisplayHotelResto() {
   projectsDisplayFiltered(filteredProjects);
 }
 
-buttonTous.addEventListener("click", (e) => {
-  e.preventDefault();
-  projectsDisplay();
-});
+buttonTous.addEventListener("click", projectsDisplay);
 buttonObjets.addEventListener("click", projectsDisplayObjets);
 buttonAppartements.addEventListener("click", projectsDisplayAppartements);
 buttonHotelResto.addEventListener("click", projectsDisplayHotelResto);
 
-// je load les fetch dès l'ouverture de la page
+// je load les données dès l'ouverture de la page
 window.addEventListener("load", fetchProjects);
 window.addEventListener("load", fetchCategory);
 console.log(localStorage.getItem("token"));
 
-// *********************** MODE EDITION *****************************
+// ************************************************* MODE EDITION ***************************************************
 
 if (localStorage.getItem("token")) {
   // je crée ma barre d'édition en haut de page
@@ -127,7 +123,7 @@ if (localStorage.getItem("token")) {
   let lienModif = document.querySelector(".lien-modif");
   lienModif.classList.add("js-modal");
 
-  // je fais disparaitre ma barre
+  // je fais disparaitre ma barre de filtres
   let filterBar = document.querySelector(".filter-bar");
   filterBar.style.display = "none";
 
@@ -139,7 +135,7 @@ if (localStorage.getItem("token")) {
   });
 }
 
-// ****************************** MODALE ************************************
+// *************************************************** MODALE ********************************************************
 
 let btnModifier = document.querySelector(".lien-modif");
 let modalContainer = document.createElement("aside");
@@ -168,7 +164,7 @@ modalWrapper.appendChild(modalContentGallery);
 modalContentAddPhoto.classList.add("modal-content2");
 modalWrapper.appendChild(modalContentAddPhoto);
 
-// Modale Gallery Display
+// MODALE GALERIE PHOTO
 
 modalContentGallery.innerHTML = `
 <div class="btn-close">
@@ -217,7 +213,7 @@ btnAddPhoto.addEventListener("click", (e) => {
   modalContentAddPhoto.style.display = null;
 });
 
-// Modale AddPhoto Display
+// MODALE AJOUT PHOTO
 
 const btnBackGallery = document.querySelector(".js-modal-back");
 
@@ -234,7 +230,7 @@ modalContentAddPhoto.innerHTML = `
 </div>
   `;
 
-// ************************************ FORMULAIRE *****************************************
+// ************************************************ FORMULAIRE **************************************************
 
 const containerForm = document.querySelector(".form-container");
 const formProjects = document.createElement("form");
@@ -280,8 +276,7 @@ fileContainer.appendChild(paragrapheForm);
 
 // Upload image dynamique
 
-// imageDisplay.style.display = "none";
-
+// je crée une fonction permettant la récupération de l'image chargée
 function loadedFile() {
   const fileRegExp = /\.(jpe?g|png)$/i;
   if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
@@ -301,13 +296,13 @@ function loadedFile() {
   }
 }
 
+// je crée une fonction pour afficher l'image chargée
 function displayImage(event, file) {
   const imageElement = document.createElement("img");
   imageElement.id = "image-added";
   imageElement.alt = "Nouveau projet";
   imageElement.src = event.target.result;
   imageElement.setAttribute("style", "display:block");
-  // imageDisplay.appendChild(figureElement);
   fileContainer.appendChild(imageElement);
 
   if ((imageElement.style.display = "block")) {
@@ -325,7 +320,6 @@ const labelCategorie = document.createElement("label");
 const inputCategorie = document.createElement("select");
 const optionCategorieBase = document.createElement("option");
 const inputTitleTitre = document.createElement("input");
-// const spanForm = document.createElement("span");
 const spanErrorImage = document.createElement("span");
 
 inputTitleTitre.classList.add("style-form");
@@ -342,7 +336,6 @@ inputCategorie.setAttribute("name", "category-form");
 inputCategorie.classList.add("style-form");
 inputCategorie.required = true;
 optionCategorieBase.textContent = "";
-// spanForm.id = "error-form";
 spanErrorImage.id = "spanErrorImage";
 
 formProjects.appendChild(labelTitle);
@@ -350,7 +343,6 @@ formProjects.appendChild(inputTitleTitre);
 formProjects.appendChild(labelCategorie);
 formProjects.appendChild(inputCategorie);
 inputCategorie.appendChild(optionCategorieBase);
-// formProjects.appendChild(spanForm);
 formProjects.appendChild(spanErrorImage);
 
 // option du formulaire dynamique, récupération des données category
@@ -396,15 +388,13 @@ formProjects.addEventListener("change", () => {
   ) {
     btnValidationAjout.classList.add("green");
     btnValidationAjout.classList.remove("grey");
-    spanForm.textContent = "";
   } else {
     btnValidationAjout.classList.add("grey");
     btnValidationAjout.classList.remove("green");
-    // spanForm.textContent = "Veuillez remplir tous les champs du formulaire";
   }
 });
 
-// **************************** OUVERTURE DE LA MODALE *********************************
+// ********************************************** OUVERTURE DE LA MODALE **************************************************
 
 let modal = null;
 const focusableSelector = `button, a, input, textarea`;
@@ -427,12 +417,12 @@ const openModal = function (e) {
     .addEventListener("click", stopPropagation);
 };
 
-// **************************** FERMETURE DE LA MODALE *********************************
+// ********************************************* FERMETURE DE LA MODALE ***************************************************
 
 const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
-  e.preventDefault();
+  // e.preventDefault();
   window.setTimeout(function () {
     modal.style.display = "none";
     modal = null;
@@ -491,10 +481,10 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
-// ***************************** SUPPRESSION D'UN PROJET ************************************
+// ******************************************* SUPPRESSION D'UN PROJET **************************************************
 
 // récupération de l'id du bouton poubelle
-// quand je clique dessus je veux qu'un projet soit supprimé
+// quand je clique dessus, je veux que le projet visé soit supprimé et que l'affichage des projets se fassent sur la page d'accueil et dans la modale
 
 // ma fonction deleteProject
 function deleteProject(event) {
@@ -502,22 +492,17 @@ function deleteProject(event) {
   console.log(elementId);
   const deleteId = elementId.split("-")[1];
   // je stocke mon id dans une variable
-  // je sépare mon id trash d'un "-" pour récupérer ensuite que le numéro de la poubelle (index)
+  // je sépare mon id trash d'un "-" pour que chaque corbeille ait un numéro associé
   console.log(deleteId);
 
-  // je crée donc la requete DELETE avec les informations suivantes
-  let data = {
-    id: deleteId,
-  };
+  // je crée la requete DELETE avec les informations suivantes
 
-  let urlDelete = `http://localhost:5678/api/works/${data}`;
+  let urlDelete = `http://localhost:5678/api/works/${deleteId}`;
 
-  // ma requête DELETE
+  // la requête DELETE
   let fetchDelete = {
     method: "DELETE",
     headers: {
-      accept: "*/*",
-      // "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
@@ -546,7 +531,7 @@ function deleteProject(event) {
     });
 }
 
-// ******************************* AJOUT D'UN PROJET ************************************
+// ***************************************************** AJOUT D'UN PROJET ************************************************************
 
 formProjects.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -554,7 +539,9 @@ formProjects.addEventListener("submit", function (e) {
   addProjects();
 });
 
+// je crée ma fonction addProjects qui sera appelé en cliquant sur le bouton Valider du formulaire Ajout Photo
 function addProjects() {
+  // je récupère le fichier, la valeur du titre et de la catégorie, pour ensuite envoyer ces données à l'API
   const formData = new FormData();
   const imgContent = document.getElementById("fichier");
   const titleImg = document.getElementById("titre");
@@ -587,14 +574,38 @@ function addProjects() {
       if (response.ok) {
         console.log("Server response: ", response);
         console.log("Projet ajouté avec succès");
-        projectsDisplayModif();
-        projectsDisplay();
-        // return response.json();
+        return response.json();
       } else {
-        console.log("Projet non envoyé");
+        throw new Error("Echec de la supression");
       }
     })
+    .then((dataProject) => {
+      // je récupère les données que j'ajoute au tableau projects avec push, puis j'appelle la fonction d'affichage pour mettre à jour
+      projects.push(dataProject);
+      updatedProjectsDisplay();
+    })
     .catch((error) => {
-      console.log("Echec de l'ajout", error);
+      console.log("Erreur, projet non envoyé", error);
     });
+}
+
+// je crée une fonction d'affichage mise à jour avec l'ajout d'un nouveau projet
+// je demande à fermer la modale suite à l'ajout du nouveau projet et met à jour l'affichage des projets sur la page d'accueil et dans la modale
+function updatedProjectsDisplay() {
+  projectsContainer.innerHTML = "";
+  projects.forEach((dataProject) => {
+    const figureElement = document.createElement("figure");
+    let imageElement = document.createElement("img");
+    let captionElement = document.createElement("figcaption");
+    figureElement.classList.add("project-card");
+    figureElement.id = dataProject.id;
+    imageElement.src = dataProject.imageUrl;
+    imageElement.alt = "image de " + dataProject.title;
+    captionElement.textContent = dataProject.title;
+    projectsContainer.appendChild(figureElement);
+    figureElement.appendChild(imageElement);
+    figureElement.appendChild(captionElement);
+  });
+  projectsDisplayModif();
+  projectsDisplay();
 }
