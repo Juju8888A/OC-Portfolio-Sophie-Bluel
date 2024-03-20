@@ -60,6 +60,7 @@ const mdpValid = function (inputPassword) {
   if (valid) {
     // mdpMsg.innerHTML = "Mot de passe valide";
     // mdpMsg.style.color = "green";
+    // mdpMsg.innerHTML = "";
     mdpMsg.innerHTML = "";
     return true;
   } else {
