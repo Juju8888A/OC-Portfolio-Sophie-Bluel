@@ -348,7 +348,7 @@ formProjects.appendChild(spanErrorImage);
 // option du formulaire dynamique, récupération des données category
 
 function chooseCategory() {
-  console.log("categories: ", category);
+  // console.log("categories: ", category);
 
   category.forEach((category) => {
     const optionCategorie = document.createElement("option");
@@ -422,7 +422,7 @@ const openModal = function (e) {
 const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
-  e.preventDefault();
+  // e.preventDefault();
   window.setTimeout(function () {
     modal.style.display = "none";
     modal = null;
@@ -574,6 +574,10 @@ function addProjects() {
       if (response.ok) {
         console.log("Server response: ", response);
         console.log("Projet ajouté avec succès");
+        // je préviens l'utilisateur que l'envoi du fichier a été réalisé avec succès
+        alert("Projet ajouté avec succès");
+        // je réinitialise les données du formulaire
+        resetForm();
         return response.json();
       } else {
         throw new Error("Echec de la supression");
@@ -583,6 +587,7 @@ function addProjects() {
       // je récupère les données que j'ajoute au tableau projects avec push, puis j'appelle la fonction d'affichage pour mettre à jour
       projects.push(dataProject);
       updatedProjectsDisplay();
+      closeModal();
     })
     .catch((error) => {
       console.log("Erreur, projet non envoyé", error);
@@ -608,4 +613,78 @@ function updatedProjectsDisplay() {
   });
   projectsDisplayModif();
   projectsDisplay();
+}
+
+// je crée une fonction pour réinitialiser les données du formulaire
+function resetForm() {
+  // concernant l'input file je remplace entièrement le contenu
+  const fileContainer = document.querySelector(".file-container");
+  const fileLoaded = document.getElementById("fichier");
+  const labelLoaded = document.querySelector(".btn-file");
+  const imgLoaded = document.getElementById("image-added");
+  fileContainer.removeChild(fileLoaded);
+  fileContainer.removeChild(labelLoaded);
+  fileContainer.removeChild(imgLoaded);
+  btnValidationAjout.classList.remove("green");
+  btnValidationAjout.classList.add("grey");
+
+  const newIcForm = document.createElement("i");
+  const newInputFile = document.createElement("input");
+  const newlabelForm = document.createElement("label");
+  const newParagrapheForm = document.createElement("p");
+  newInputFile.id = "fichier";
+  newInputFile.setAttribute("type", "file");
+  newInputFile.setAttribute("name", "fichier");
+  newInputFile.setAttribute("accept", "image/*");
+  newInputFile.setAttribute("style", "display:none;");
+  newInputFile.required = true;
+  newlabelForm.classList.add("btn-file");
+  newlabelForm.setAttribute("for", "fichier");
+  newlabelForm.setAttribute("style", "display:block;");
+  newlabelForm.textContent = "+ Ajouter photo";
+  newIcForm.classList.add("fa-regular", "fa-image", "display-i");
+  newIcForm.setAttribute("style", "display:block;");
+  newParagrapheForm.textContent = "jpg, png : 4mo max";
+  newParagrapheForm.setAttribute("style", "display:block;");
+
+  fileContainer.appendChild(newIcForm);
+  fileContainer.appendChild(newlabelForm);
+  fileContainer.appendChild(newInputFile);
+  fileContainer.appendChild(newParagrapheForm);
+
+  function loadedFile() {
+    const fileRegExp = /\.(jpe?g|png)$/i;
+    if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
+      spanErrorImage.style.color = "red";
+      spanErrorImage.textContent = "Erreur, veuillez charger une image";
+      console.log("Ce fichier n'est pas accepté");
+      console.log(spanErrorImage);
+    } else {
+      const image = this.files[0];
+      const imageReader = new FileReader();
+      imageReader.readAsDataURL(image);
+      imageReader.addEventListener("load", (event) => {
+        displayImage(event, image);
+      });
+      spanErrorImage.textContent = "";
+      console.log("Ce fichier est accepté");
+    }
+  }
+  function displayImage(event, file) {
+    const imageElement = document.createElement("img");
+    imageElement.id = "image-added";
+    imageElement.alt = "Nouveau projet";
+    imageElement.src = event.target.result;
+    imageElement.setAttribute("style", "display:block");
+    fileContainer.appendChild(imageElement);
+
+    if ((imageElement.style.display = "block")) {
+      newIcForm.setAttribute("style", "display:none;");
+      newlabelForm.setAttribute("style", "display:none;");
+      newParagrapheForm.setAttribute("style", "display:none;");
+    }
+  }
+  newInputFile.addEventListener("change", loadedFile);
+  // concernant l'input text et select, j'utilise reset pour supprimer les valeurs existantes
+  formProjects.reset();
 }
