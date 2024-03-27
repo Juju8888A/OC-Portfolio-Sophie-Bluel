@@ -1,10 +1,6 @@
 const projectsContainer = document.querySelector(".gallery");
-// récupération des boutons de la barre de filtres
-const buttonObjets = document.getElementById("btn-objets");
-const buttonAppartements = document.getElementById("btn-appartements");
-const buttonHotelResto = document.getElementById("btn-hotel-resto");
+const filterBarContainer = document.querySelector(".filter-bar");
 const buttonTous = document.getElementById("btn-tous");
-
 // je range les données reçues dans 2 tableaux
 let projects = [];
 let category = [];
@@ -15,7 +11,6 @@ async function fetchProjects() {
     .then((res) => res.json())
     .then((data) => {
       projects = data;
-      console.log(projects);
       projectsDisplay();
       projectsDisplayModif();
     });
@@ -26,8 +21,21 @@ async function fetchCategory() {
   await fetch("http://localhost:5678/api/categories")
     .then((res) => res.json())
     .then((data) => (category = data));
-  console.log(category);
+  buttonFilter();
   chooseCategory();
+}
+
+// je crée une fonction pour afficher dynamiquement les categories sur les boutons
+function buttonFilter() {
+  filterBarContainer.innerHTML += "";
+  category.forEach((category) => {
+    const btnFilter = document.createElement("button");
+    btnFilter.classList.add("btnFilter");
+    btnFilter.id = category.id;
+    btnFilter.innerText = category.name;
+    btnFilter.addEventListener("click", projectsDisplayFiltered);
+    filterBarContainer.appendChild(btnFilter);
+  });
 }
 
 // je crée les éléments figure qui contiendront les projets de l'architecte grâce aux données de l'API
@@ -51,7 +59,10 @@ function projectsDisplay() {
 
 // je crée l'affichage de mes projets filtrés
 
-function projectsDisplayFiltered(filteredProjects) {
+function projectsDisplayFiltered(event) {
+  const filteredProjects = projects.filter(
+    (project) => project.category.name === event.target.innerText
+  );
   projectsContainer.innerHTML = "";
   filteredProjects.forEach((project) => {
     const figureElement = document.createElement("figure");
@@ -68,43 +79,13 @@ function projectsDisplayFiltered(filteredProjects) {
   });
 }
 
-// J'utilise FILTER pour filtrer les différentes catégories
-// Affichage objets
-
-function projectsDisplayObjets() {
-  const filteredProjects = projects.filter(
-    (project) => project.category.name === "Objets"
-  );
-  projectsDisplayFiltered(filteredProjects);
-}
-
-// Affichage appartements
-
-function projectsDisplayAppartements() {
-  filteredProjects = projects.filter(
-    (project) => project.category.name === "Appartements"
-  );
-  projectsDisplayFiltered(filteredProjects);
-}
-
-// Affichage hotels et restaurants
-
-function projectsDisplayHotelResto() {
-  filteredProjects = projects.filter(
-    (project) => project.category.name === "Hotels & restaurants"
-  );
-  projectsDisplayFiltered(filteredProjects);
-}
-
 buttonTous.addEventListener("click", projectsDisplay);
-buttonObjets.addEventListener("click", projectsDisplayObjets);
-buttonAppartements.addEventListener("click", projectsDisplayAppartements);
-buttonHotelResto.addEventListener("click", projectsDisplayHotelResto);
 
 // je load les données dès l'ouverture de la page
-window.addEventListener("load", fetchProjects);
-window.addEventListener("load", fetchCategory);
-console.log(localStorage.getItem("token"));
+window.addEventListener("load", (event) => {
+  fetchProjects();
+  fetchCategory();
+});
 
 // ************************************************* MODE EDITION ***************************************************
 
