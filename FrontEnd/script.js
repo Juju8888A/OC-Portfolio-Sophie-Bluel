@@ -1,6 +1,6 @@
 const projectsContainer = document.querySelector(".gallery");
 const filterBarContainer = document.querySelector(".filter-bar");
-const buttonTous = document.getElementById("btn-tous");
+
 // je range les données reçues dans 2 tableaux
 let projects = [];
 let category = [];
@@ -25,7 +25,7 @@ async function fetchCategory() {
   chooseCategory();
 }
 
-// je crée une fonction pour afficher dynamiquement les categories sur les boutons
+// je crée une fonction pour afficher dynamiquement les categories sur les boutons et permettre l'affichage des projets en cliquant sur le bouton Tous
 function buttonFilter() {
   filterBarContainer.innerHTML += "";
   category.forEach((category) => {
@@ -36,6 +36,8 @@ function buttonFilter() {
     btnFilter.addEventListener("click", projectsDisplayFiltered);
     filterBarContainer.appendChild(btnFilter);
   });
+  const buttonTous = document.getElementById("btn-tous");
+  buttonTous.addEventListener("click", projectsDisplay);
 }
 
 // je crée les éléments figure qui contiendront les projets de l'architecte grâce aux données de l'API
@@ -78,8 +80,6 @@ function projectsDisplayFiltered(event) {
     figureElement.appendChild(captionElement);
   });
 }
-
-buttonTous.addEventListener("click", projectsDisplay);
 
 // je load les données dès l'ouverture de la page
 window.addEventListener("load", (event) => {
@@ -263,8 +263,7 @@ function loadedFile() {
   if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
     spanErrorImage.style.color = "red";
     spanErrorImage.textContent = "Erreur, veuillez charger une image";
-    console.log("Ce fichier n'est pas accepté");
-    console.log(spanErrorImage);
+    // console.log("Ce fichier n'est pas accepté");
   } else {
     const image = this.files[0];
     const imageReader = new FileReader();
@@ -273,7 +272,7 @@ function loadedFile() {
       displayImage(event, image);
     });
     spanErrorImage.textContent = "";
-    console.log("Ce fichier est accepté");
+    // console.log("Ce fichier est accepté");
   }
 }
 
@@ -329,8 +328,6 @@ formProjects.appendChild(spanErrorImage);
 // option du formulaire dynamique, récupération des données category
 
 function chooseCategory() {
-  // console.log("categories: ", category);
-
   category.forEach((category) => {
     const optionCategorie = document.createElement("option");
     optionCategorie.setAttribute("value", category.id);
@@ -359,7 +356,6 @@ formProjects.appendChild(btnValidationAjout);
 
 // si une image est chargée, un titre est écrit, et une catégorie est choisie, alors le bouton de validation devient vert avant la soumission du formulaire
 formProjects.addEventListener("change", () => {
-  console.log("Change event");
   const imgContenu = document.getElementById("fichier");
 
   if (
@@ -470,11 +466,9 @@ window.addEventListener("keydown", function (e) {
 // ma fonction deleteProject
 function deleteProject(event) {
   const elementId = event.target.id;
-  console.log(elementId);
   const deleteId = elementId.split("-")[1];
   // je stocke mon id dans une variable
   // je sépare mon id trash d'un "-" pour que chaque corbeille ait un numéro associé
-  console.log(deleteId);
 
   // je crée la requete DELETE avec les informations suivantes
 
@@ -490,25 +484,24 @@ function deleteProject(event) {
 
   fetch(urlDelete, fetchDelete)
     .then((response) => {
-      console.log("Server response: ", response);
+      // console.log("Server response: ", response);
       if (!response.ok) {
         throw new Error("Echec de la supression");
       } else {
-        console.log("Projet supprimé avec succès");
+        // console.log("Projet supprimé avec succès");
 
         // dans mon tableau, je souhaite filtrer, conserver uniquement les éléments dont l'ID est différent de deleteId
         projects = projects.filter((e) => {
           // console.log(e.id, parseInt(deleteId));
           return e.id !== parseInt(deleteId);
         });
-        console.log(projects);
         // je mets à jour mes affichages
         projectsDisplayModif();
         projectsDisplay();
       }
     })
     .catch((error) => {
-      console.log("Echec de la supression", error);
+      // console.log("Echec de la supression", error);
     });
 }
 
@@ -516,7 +509,6 @@ function deleteProject(event) {
 
 formProjects.addEventListener("submit", function (e) {
   e.preventDefault();
-  console.log(e);
   addProjects();
 });
 
@@ -528,16 +520,9 @@ function addProjects() {
   const titleImg = document.getElementById("titre");
   const categoryImg = document.getElementById("choix-category");
 
-  console.log(imgContent);
-  console.log(titleImg);
-  console.log(categoryImg);
-
   formData.append("image", imgContent.files[0], "restaurant-mj-ny.png");
   formData.append("title", titleImg.value);
   formData.append("category", categoryImg.value);
-  for (const item of formData) {
-    console.log(item);
-  }
 
   let urlAdd = `http://localhost:5678/api/works`;
 
@@ -553,8 +538,8 @@ function addProjects() {
   fetch(urlAdd, fetchAdd)
     .then((response) => {
       if (response.ok) {
-        console.log("Server response: ", response);
-        console.log("Projet ajouté avec succès");
+        // console.log("Server response: ", response);
+        // console.log("Projet ajouté avec succès");
         // je préviens l'utilisateur que l'envoi du fichier a été réalisé avec succès
         alert("Projet ajouté avec succès");
         // je réinitialise les données du formulaire
@@ -571,7 +556,7 @@ function addProjects() {
       closeModal();
     })
     .catch((error) => {
-      console.log("Erreur, projet non envoyé", error);
+      // console.log("Erreur, projet non envoyé", error);
     });
 }
 
@@ -638,8 +623,7 @@ function resetForm() {
     if (this.files.length === 0 || !fileRegExp.test(this.files[0].name)) {
       spanErrorImage.style.color = "red";
       spanErrorImage.textContent = "Erreur, veuillez charger une image";
-      console.log("Ce fichier n'est pas accepté");
-      console.log(spanErrorImage);
+      // console.log("Ce fichier n'est pas accepté");
     } else {
       const image = this.files[0];
       const imageReader = new FileReader();
@@ -648,7 +632,7 @@ function resetForm() {
         displayImage(event, image);
       });
       spanErrorImage.textContent = "";
-      console.log("Ce fichier est accepté");
+      // console.log("Ce fichier est accepté");
     }
   }
   function displayImage(event, file) {
